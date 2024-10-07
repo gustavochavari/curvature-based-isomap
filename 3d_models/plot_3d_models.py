@@ -7,25 +7,32 @@ Unsupervised metric learning via K-ISOMAP for high-dimensional data clustering -
 Created on Sat May 25 13:41:56 2024
 
 """
+
+
 # Imports
 import sys
-import time
+sys.path.append('C:/Users/Gustavo/Documents/Mestrado/curvature-based-isomap/functions')
+
+import repliclust
 import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import sqrt
 from sklearn.manifold import Isomap
-from kisomap_latest import KIsomap
+from sklearn.datasets import make_swiss_roll
+from kisomap import KIsomap
 import umap
 import pandas as pd
-import json
 from matplotlib import cm
+
+
 
 # To avoid unnecessary warning messages
 warnings.simplefilter(action='ignore')
 
 
-#######################################
+
+####################################
 ######## TORUS LINK ################
 
 # Parameters
@@ -36,7 +43,7 @@ U, V = np.meshgrid(u, v)
 R = 5
 r = 1
 
-# S-Surface equation
+# Torus Surface equation
 x = (R+r*np.cos(V))*np.cos(U)
 y = (R+r*np.cos(V))*np.sin(U)-5
 z = r*np.sin(V)
@@ -54,8 +61,12 @@ data_matrix_1 = np.column_stack((x.flatten(), y.flatten(), z.flatten())) + noise
 noise_matrix_2 = np.random.normal(0, 0.3, (len(z_1.flatten()), 3))
 data_matrix_2 = np.column_stack((x_1.flatten(), y_1.flatten(), z_1.flatten())) + noise_matrix_2
 
-result_matrix = np.vstack([np.column_stack((data_matrix_1, np.full(len(z.flatten()), 0.2))), 
-                          np.column_stack((data_matrix_2, np.full(len(z_1.flatten()), 0.8)))]).astype('float64')
+result_matrix = np.vstack([np.column_stack((data_matrix_1, np.full(len(z.flatten()), 0))), 
+                          np.column_stack((data_matrix_2, np.full(len(z_1.flatten()), 1)))]).astype('float64')
+
+
+df = pd.DataFrame(result_matrix, columns=['x', 'y', 'z', 'label'])
+df.to_csv('torus_link_data.csv', index=False)
 
 
 
@@ -73,7 +84,7 @@ reducer = umap.UMAP(n_neighbors=nn)
 dados_umap = reducer.fit_transform(result_matrix[:,:3])
 
 
-#### Plot
+# Plot points
 fig = plt.figure(figsize=(12,3))
 
 
@@ -88,7 +99,7 @@ ax1.set_ylim3d(-10, 5)
 ax1.set_zlim3d(-7, 5)
 ax1.set_xlim(-10, 5)
 ax1.set_ylim(-10, 5)
-# Projecting the points onto the xy-plane by plotting them with a fixed z-coordinate that matches the lower z-limit.
+# Shadow = Projecting the points onto the xy-plane by plotting them with a fixed z-coordinate that matches the lower z-limit.
 ax1.scatter(result_matrix.T[0], result_matrix.T[1], -7*np.ones_like(result_matrix.T[2]), c='gray',alpha=0.02)
 
 
@@ -117,6 +128,74 @@ ax4.axis('off')
 ax4.set_xlim(-10, 10)
 ax4.set_ylim(-8, 7)
 
-plt.savefig('linked_torus.tiff',format='tiff',dpi=300)
-plt.savefig('linked_torus.jpeg',format='jpeg',dpi=300)
+#plt.savefig('torus_link.tiff',format='tiff',dpi=300)
+plt.savefig('torus_link.jpeg',format='jpeg',dpi=300)
 plt.close()
+
+#################################
+######## REPLICLUST #############
+
+# Gaussian Dataset
+archetype = repliclust.Archetype(
+                    dim=3,
+                    n_samples=500,
+                    max_overlap=0.00001, min_overlap=0.000004 ,name="oblong"
+                    )
+X1, y1, _ = (repliclust.DataGenerator(archetype).synthesize(quiet=True))
+
+X1 = X1.astype(np.float64)
+
+# Parameters
+noise_scale = 1
+
+# Add noise
+magnitude = np.linspace(0,1,26)
+
+ruido = np.random.normal(0, scale=magnitude[0], size=X1.shape)
+X1.T[0] = X1.T[0] + ruido.T[0]
+X1.T[1] = X1.T[1] + ruido.T[1]
+X1.T[2] = X1.T[2] + ruido.T[2]
+
+
+df = pd.DataFrame({
+    'x': X1[:, 0],  # First column of X1
+    'y': X1[:, 1],  # Second column of X1
+    'z': X1[:, 2],  # Third column of X1
+    'label': y1     # Label data
+})
+
+df.to_csv('repliclust_data.csv', index=False)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot points
+ax.scatter(X1.T[0], X1.T[1], X1.T[2], c=y1, marker='.')
+ax.set_title('Repliclust Data')  
+
+#plt.savefig('repliclust.tiff',format='tiff',dpi=300)
+plt.savefig('repliclust.jpeg',format='jpeg',dpi=300)
+plt.close()
+
+####################################
+######## SWISS ROLL ################
+
+# Swiss Roll Dataset
+n_samples = 3000
+X, color = make_swiss_roll(n_samples, noise=0.0)
+
+# Add noise
+noise_level = 0.05 * (np.max(X[:, 0]) - np.min(X[:, 0]))
+X_noisy = X + noise_level * np.random.randn(*X.shape)
+
+### Plot points
+fig = plt.figure(figsize=(6, 6))
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=color, cmap=plt.cm.Spectral)
+ax.set_title('Swiss Roll Dataset')
+
+#plt.savefig('swiss_roll.tiff',format='tiff',dpi=300)
+plt.savefig('swiss_roll.jpeg',format='jpeg',dpi=300)
+plt.close()
+
+df.to_csv('swiss_roll_data.csv', index=False)

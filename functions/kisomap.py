@@ -47,6 +47,7 @@ from sklearn.metrics.cluster import v_measure_score
 from sklearn.metrics.cluster import fowlkes_mallows_score
 from sklearn.metrics.cluster import calinski_harabasz_score
 from scipy import sparse
+from hdbscan import HDBSCAN
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.metrics.cluster import (rand_score, calinski_harabasz_score, 
 fowlkes_mallows_score, v_measure_score, silhouette_score, davies_bouldin_score,
@@ -140,7 +141,7 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     for i in range(n):
         for j in range(n):
             if B[i, j] > 0:
-                delta = norm(matriz_pcs[i, :, :] - matriz_pcs[j, :, :], axis=0)
+                delta = norm(matriz_pcs[i, :, :d+1] - matriz_pcs[j, :, :d+1], axis=0)
                 ##### Functions of the principal curvatures (definition of the metric)
                 # We must choose one single option for each execution
                 if option == 0:
@@ -282,32 +283,74 @@ def _fix_connected_components(
  Performs clustering in data, returns the obtained labels and evaluates the clusters
 '''
 
-def Clustering(dados, target, DR_method, cluster):
-    rand = ca = fm = v = silhouette = davies_bouldin = -1
-    try:
-        # Number of classes
-        c = len(np.unique(target))
-        # Clustering algorithm
-        if cluster == 'kmeans':
-            kmeans = KMeans(n_clusters=c, random_state=42).fit(dados.T)
-            labels = kmeans.labels_
-        elif cluster == 'gmm':
-            labels = GaussianMixture(n_components=c, random_state=42).fit_predict(dados.T)
-        else:
-            ward = AgglomerativeClustering(n_clusters=c, linkage='ward').fit(dados.T)
-            labels = ward.labels_
 
-        # Computation of the cluster evaluation metrics    
-        rand = rand_score(target, labels)    
-        ca = calinski_harabasz_score(dados.T, labels)
-        fm = fowlkes_mallows_score(target, labels)
-        v = v_measure_score(target, labels)
-        silhouette = silhouette_score(dados.T, labels)
-        davies_bouldin = davies_bouldin_score(dados.T, labels)
-    except Exception as e: 
-        print(DR_method + " -------- def Clustering error:", e)
-    finally:
-        return [rand, ca, fm, v, silhouette, davies_bouldin, labels]
+def Clustering(dados, target, DR_method):
+    # Dicionário para armazenar as métricas de cada método de agrupamento
+    resultados = {}
+    
+    # Número de classes
+    c = len(np.unique(target))
+
+    # Função auxiliar para calcular as métricas
+    def calcular_metricas(target, labels, dados):
+        try:
+            ri = rand_score(target, labels)
+            ch = calinski_harabasz_score(dados.T, labels)
+            fm = fowlkes_mallows_score(target, labels)
+            v = v_measure_score(target, labels)
+            s = silhouette_score(dados.T, labels)
+            db = davies_bouldin_score(dados.T, labels)
+        except Exception as e:
+            print(f"Erro ao calcular as métricas: {e}")
+            ri = ch = fm = v = s = db = -1
+        return {
+            'ri': ri,
+            'ch': ch,
+            'fm': fm,
+            'v': v,
+            's': s,
+            'db': db
+        }
+
+    # KMeans
+    try:
+        cluster = 'KMeans'
+        kmeans = KMeans(n_clusters=c, random_state=42).fit(dados.T)
+        labels_kmeans = kmeans.labels_
+        resultados[cluster] = calcular_metricas(target, labels_kmeans, dados)
+    except Exception as e:
+        print(f"{DR_method} {cluster} -------- erro no agrupamento:", e)
+        resultados[cluster] = calcular_metricas(target, labels_kmeans, dados)
+    
+    # GMM
+    try:
+        cluster = 'GMM'
+        labels_gmm = GaussianMixture(n_components=c, random_state=42).fit_predict(dados.T)
+        resultados[cluster] = calcular_metricas(target, labels_gmm, dados)
+    except Exception as e:
+        print(f"{DR_method} {cluster} -------- erro no agrupamento:", e)
+        resultados[cluster] = calcular_metricas(target, labels_gmm, dados)
+    
+    # Ward (Agglomerative Clustering)
+    try:
+        cluster = 'Ward'
+        ward = AgglomerativeClustering(n_clusters=c, linkage='ward').fit(dados.T)
+        labels_ward = ward.labels_
+        resultados[cluster] = calcular_metricas(target, labels_ward, dados)
+    except Exception as e:
+        print(f"{DR_method} {cluster} -------- erro no agrupamento:", e)
+        resultados[cluster] = calcular_metricas(target, labels_ward, dados)
+    
+    # HDBSCAN
+    #try:
+    #    cluster = 'HDBSCAN'
+    #    hdbscan = HDBSCAN(min_cluster_size=5).fit(dados.T)
+    #    labels_hdbscan = hdbscan.labels_
+    #    resultados[cluster] = calcular_metricas(target, labels_hdbscan, dados)
+    #except Exception as e:
+    #    print(f"{DR_method} {cluster} -------- erro no agrupamento:", e)
+
+    return resultados
 
 
     #print(silhouette)
@@ -329,7 +372,7 @@ def Clustering(dados, target, DR_method, cluster):
 '''
 Produces scatter plots of the 2D mappings
 '''
-def PlotaDados(dados, labels, metodo):
+def PlotaDados(dados, labels, metodo, CLUSTER):
     # Number of classes
     nclass = len(np.unique(labels))
     # Converts list to an array
@@ -348,7 +391,7 @@ def PlotaDados(dados, labels, metodo):
         cor = cores[i]
         plt.scatter(dados[indices, 0], dados[indices, 1], c=cor, marker='*')
     # Save figure in image fila
-    nome_arquivo = 'images/' + metodo + '.png'
+    nome_arquivo = 'images/' + metodo + '_' + CLUSTER + '.png'
     plt.title(metodo+' clusters')
     plt.savefig(nome_arquivo)
     plt.close()

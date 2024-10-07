@@ -1,2 +1,5 @@
 venv/
 datasets/
+images/
+__pycache__
+totalCurvatureIsomap/
