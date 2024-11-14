@@ -28,38 +28,28 @@ from numpy import sqrt
 from numpy.linalg import det
 from numpy.linalg import inv
 from numpy.linalg import norm
-from scipy.spatial.distance import cosine
-from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.manifold import Isomap
 from sklearn import preprocessing
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 from sklearn.cluster import AgglomerativeClustering
 from scipy.sparse.csgraph import connected_components
-from sklearn.model_selection import train_test_split
 from sklearn.metrics.cluster import rand_score
 from sklearn.metrics.cluster import silhouette_score
-from sklearn.metrics.cluster import mutual_info_score
-from sklearn.metrics.cluster import homogeneity_score
-from sklearn.metrics.cluster import completeness_score
 from sklearn.metrics.cluster import v_measure_score
+from scipy.sparse.csgraph import dijkstra as graph_shortest_path
+from sklearn.neighbors import kneighbors_graph
 from sklearn.metrics.cluster import fowlkes_mallows_score
 from sklearn.metrics.cluster import calinski_harabasz_score
 from scipy import sparse
-from hdbscan import HDBSCAN
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.metrics.cluster import (rand_score, calinski_harabasz_score, 
-fowlkes_mallows_score, v_measure_score, silhouette_score, davies_bouldin_score,
-adjusted_rand_score, adjusted_mutual_info_score, normalized_mutual_info_score, 
-homogeneity_score, completeness_score)
+fowlkes_mallows_score, v_measure_score, silhouette_score, davies_bouldin_score)
 
 # To avoid unnecessary warning messages
 warnings.simplefilter(action='ignore')
 
 #################################################################################
-# Fast K-ISOMAP implementation - consumes more memory, but it is a lot faster
-# Pre-allocate matrices to speed up performance
+# K-ISOMAP implementation 
 #################################################################################
 def KIsomap(dados, k, d, option, alpha=0.5):
     # Number of samples and features  
@@ -71,6 +61,142 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     knnGraph = sknn.kneighbors_graph(dados, n_neighbors=k, mode='distance')
     A = knnGraph.toarray()
     # Computes the means and covariance matrices for each patch
+
+    # Verificar o número de componentes conectados
+    n_connected_components, labels = connected_components(knnGraph)
+
+    # Caso o número de componentes conectados seja maior que 1
+    if n_connected_components > 1:
+        # Verificação de métrica 'precomputed' com matriz esparsa
+        if issparse(A):
+            raise RuntimeError(
+                "The number of connected components of the neighbors graph"
+                f" is {n_connected_components} > 1. The graph cannot be "
+                "completed with metric='precomputed', and Isomap cannot be"
+                " fitted. Increase the number of neighbors to avoid this "
+                "issue, or precompute the full distance matrix instead "
+                "of passing a sparse neighbors graph."
+            )
+
+        # Emitir aviso sobre desempenho
+        warnings.warn(
+            (
+                "The number of connected components of the neighbors graph "
+                f"is {n_connected_components} > 1. Completing the graph to fit"
+                " Isomap might be slow. Increase the number of neighbors to "
+                "avoid this issue."
+            ),
+            stacklevel=2,
+        )
+
+        # Corrigir componentes conexas
+        nbg = _fix_connected_components(
+            X=dados,
+            graph=knnGraph,
+            n_connected_components=n_connected_components,
+            component_labels=labels,
+            mode="distance",
+            metric='euclidean'  
+            # Substitua por sua métrica de distância
+            # Adicione parâmetros adicionais de métrica se necessário
+        )
+        A = nbg.toarray()
+
+    for i in range(n):   
+        vizinhos = A[i, :]
+        indices = vizinhos.nonzero()[0]
+        if len(indices) == 0:                   # Treat isolated points
+            matriz_pcs[i, :, :] = np.eye(m)     # Eigenvectors in columns
+        else:
+            # Get the neighboring samples
+            amostras = dados[indices]
+
+            maximo = np.nanmax(amostras[amostras != np.inf])   
+            amostras[np.isnan(amostras)] = 0
+            amostras[np.isinf(amostras)] = maximo
+            v, w = np.linalg.eig(np.cov(amostras.T))
+            # Sort the eigenvalues
+            ordem = v.argsort()
+            # Select the d eigenvectors associated to the d largest eigenvalues
+            maiores_autovetores = w[:, ordem[::-1]]                 
+            # Projection matrix
+            Wpca = maiores_autovetores  # Autovetores nas colunas
+            #print(Wpca.shape)
+            matriz_pcs[i, :, :] = Wpca
+        
+    # Defines the patch-based matrix (graph)
+    B = A.copy()
+    for i in range(n):
+        for j in range(i,n):
+            if B[i, j] > 0:
+                delta = norm(matriz_pcs[i, :, :d+1] - matriz_pcs[j, :, :d+1], axis=0)
+                ##### Functions of the principal curvatures (definition of the metric)
+                # We must choose one single option for each execution
+                if option == 0:
+                    B[i, j] = norm(delta)                  # metric A0 - Norms of the principal curvatures
+                elif option == 1:
+                    B[i, j] = delta[0]                      # metric A1 - Curvature of the first principal component
+                elif option == 2:
+                    B[i, j] = delta[-1]                    # metric A2 - Curvature of the last principal component
+                elif option == 3:
+                    B[i, j] = (delta[0] + delta[-1])/2     # metric A3 - Average between the curvatures of first and last principal components
+                elif option == 4:
+                    B[i, j] = np.sum(delta)/len(delta)     # metric A4 - Mean curvature
+                elif option == 5:
+                    B[i, j] = max(delta)                   # metric A5 - Maximum curvature
+                elif option == 6:
+                    B[i, j] = min(delta)                   # metric A6 - Minimum curvature
+                elif option == 7:
+                    B[i, j] = min(delta)*max(delta)        # metric A7 - Product between minimum and maximum curvatures
+                elif option == 8:
+                    B[i, j] = max(delta) - min(delta)      # metric A8 - Difference between maximum and minimum curvatures
+                elif option == 9:
+                    B[i, j] = 1 - np.exp(-delta.mean())     # metric A9 - Negative exponential kernel
+                else:
+                    B[i, j] = ((1-alpha)*A[i, j]/sum(A[i, :]) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
+            
+            # Simmetry
+            B[j,i]=B[i,j]
+                 
+    
+                
+    # Computes geodesic distances using the previous selected metric
+    G = nx.from_numpy_array(B)
+    D = nx.floyd_warshall_numpy(G)  
+    # Computes centering matrix H
+    H = np.eye(n, n) - (1/n)*np.ones((n, n))
+    # Computes the inner products matrix B
+    B = -0.5*H.dot(D**2).dot(H)    
+    # Remove infs and nans from B (if the graph is not connected)
+    maximo = np.nanmax(B[B != np.inf])   
+    B[np.isnan(B)] = 0
+    B[np.isinf(B)] = maximo
+    # Eigeendecomposition
+    lambdas, alphas = np.linalg.eig(B)
+    # Sort eigenvalues and eigenvectors
+    indices = lambdas.argsort()[::-1]
+    lambdas = lambdas[indices]
+    alphas = alphas[:, indices]
+    # Select the d largest eigenvectors
+    lambdas = lambdas[0:d]
+    alphas = alphas[:, 0:d]
+    # Computes the intrinsic coordinates
+    output = alphas*np.sqrt(lambdas)    
+    # Return the low dimensional coordinates
+
+    return output.real, D
+
+def KGraph(dados, k, d, option, alpha=0.5):
+    # Number of samples and features  
+    n = dados.shape[0]
+    m = dados.shape[1]
+    # Matrix to store the principal components for each neighborhood
+    matriz_pcs = np.zeros((n, m, m))
+    # Generate KNN graph
+    knnGraph = sknn.kneighbors_graph(dados, n_neighbors=k, mode='distance')
+    # Computes the means and covariance matrices for each patch
+
+    A=knnGraph.toarray()
 
     # Verificar o número de componentes conectados
     n_connected_components, labels = connected_components(knnGraph)
@@ -111,10 +237,8 @@ def KIsomap(dados, k, d, option, alpha=0.5):
         )
 
         A = nbg.toarray()
-
         
-
-    for i in range(n):       
+    for i in range(n):     
         vizinhos = A[i, :]
         indices = vizinhos.nonzero()[0]
         if len(indices) == 0:                   # Treat isolated points
@@ -139,7 +263,7 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     # Defines the patch-based matrix (graph)
     B = A.copy()
     for i in range(n):
-        for j in range(n):
+        for j in range(i,n):
             if B[i, j] > 0:
                 delta = norm(matriz_pcs[i, :, :d+1] - matriz_pcs[j, :, :d+1], axis=0)
                 ##### Functions of the principal curvatures (definition of the metric)
@@ -166,32 +290,11 @@ def KIsomap(dados, k, d, option, alpha=0.5):
                     B[i, j] = 1 - np.exp(-delta.mean())     # metric A9 - Negative exponential kernel
                 else:
                     B[i, j] = ((1-alpha)*A[i, j]/sum(A[i, :]) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
-                
-    # Computes geodesic distances using the previous selected metric
-    G = nx.from_numpy_array(B)
-    D = nx.floyd_warshall_numpy(G)  
-    # Computes centering matrix H
-    H = np.eye(n, n) - (1/n)*np.ones((n, n))
-    # Computes the inner products matrix B
-    B = -0.5*H.dot(D**2).dot(H)    
-    # Remove infs and nans from B (if the graph is not connected)
-    maximo = np.nanmax(B[B != np.inf])   
-    B[np.isnan(B)] = 0
-    B[np.isinf(B)] = maximo
-    # Eigeendecomposition
-    lambdas, alphas = np.linalg.eig(B)
-    # Sort eigenvalues and eigenvectors
-    indices = lambdas.argsort()[::-1]
-    lambdas = lambdas[indices]
-    alphas = alphas[:, indices]
-    # Select the d largest eigenvectors
-    lambdas = lambdas[0:d]
-    alphas = alphas[:, 0:d]
-    # Computes the intrinsic coordinates
-    output = alphas*np.sqrt(lambdas)    
-    # Return the low dimensional coordinates
-    return output.real
+            
+            # Simmetry
+            B[j,i]=B[i,j]
 
+    return B
 
 def _fix_connected_components(
     X,
@@ -200,50 +303,7 @@ def _fix_connected_components(
     component_labels,
     mode="distance",
     metric="euclidean",
-    **kwargs,
-):
-    """Add connections to sparse graph to connect unconnected components.
-
-    For each pair of unconnected components, compute all pairwise distances
-    from one component to the other, and add a connection on the closest pair
-    of samples. This is a hacky way to get a graph with a single connected
-    component, which is necessary for example to compute a shortest path
-    between all pairs of samples in the graph.
-
-    Parameters
-    ----------
-    X : array of shape (n_samples, n_features) or (n_samples, n_samples)
-        Features to compute the pairwise distances. If `metric =
-        "precomputed"`, X is the matrix of pairwise distances.
-
-    graph : sparse matrix of shape (n_samples, n_samples)
-        Graph of connection between samples.
-
-    n_connected_components : int
-        Number of connected components, as computed by
-        `scipy.sparse.csgraph.connected_components`.
-
-    component_labels : array of shape (n_samples)
-        Labels of connected components, as computed by
-        `scipy.sparse.csgraph.connected_components`.
-
-    mode : {'connectivity', 'distance'}, default='distance'
-        Type of graph matrix: 'connectivity' corresponds to the connectivity
-        matrix with ones and zeros, and 'distance' corresponds to the distances
-        between neighbors according to the given metric.
-
-    metric : str
-        Metric used in `sklearn.metrics.pairwise.pairwise_distances`.
-
-    kwargs : kwargs
-        Keyword arguments passed to
-        `sklearn.metrics.pairwise.pairwise_distances`.
-
-    Returns
-    -------
-    graph : sparse matrix of shape (n_samples, n_samples)
-        Graph of connection between samples, with a single connected component.
-    """
+    **kwargs):
     if metric == "precomputed" and sparse.issparse(X):
         raise RuntimeError(
             "_fix_connected_components with metric='precomputed' requires the "
@@ -279,11 +339,9 @@ def _fix_connected_components(
     return graph
 
 
-'''
- Performs clustering in data, returns the obtained labels and evaluates the clusters
-'''
-
-
+#
+# Performs clustering in data, returns the obtained labels and evaluates the clusters
+#
 def Clustering(dados, target, DR_method):
     # Dicionário para armazenar as métricas de cada método de agrupamento
     resultados = {}
@@ -309,7 +367,8 @@ def Clustering(dados, target, DR_method):
             'fm': fm,
             'v': v,
             's': s,
-            'db': db
+            'db': db,
+            'labels': labels
         }
 
     # KMeans
@@ -329,7 +388,7 @@ def Clustering(dados, target, DR_method):
         resultados[cluster] = calcular_metricas(target, labels_gmm, dados)
     except Exception as e:
         print(f"{DR_method} {cluster} -------- erro no agrupamento:", e)
-        resultados[cluster] = calcular_metricas(target, labels_gmm, dados)
+        resultados[cluster] = [calcular_metricas(target, labels_gmm, dados),labels_gmm]
     
     # Ward (Agglomerative Clustering)
     try:
@@ -340,39 +399,14 @@ def Clustering(dados, target, DR_method):
     except Exception as e:
         print(f"{DR_method} {cluster} -------- erro no agrupamento:", e)
         resultados[cluster] = calcular_metricas(target, labels_ward, dados)
-    
-    # HDBSCAN
-    #try:
-    #    cluster = 'HDBSCAN'
-    #    hdbscan = HDBSCAN(min_cluster_size=5).fit(dados.T)
-    #    labels_hdbscan = hdbscan.labels_
-    #    resultados[cluster] = calcular_metricas(target, labels_hdbscan, dados)
-    #except Exception as e:
-    #    print(f"{DR_method} {cluster} -------- erro no agrupamento:", e)
 
     return resultados
-
-
-    #print(silhouette)
-    #print(davies_bouldin)
-    #ari = adjusted_rand_score(target, labels)
-    #ami = adjusted_mutual_info_score(target, labels)
-    #nmi = normalized_mutual_info_score(target, labels)
-    #homogeneity = homogeneity_score(target, labels)
-    #completeness = completeness_score(target, labels)
-    #purity = cluster_purity(target, labels)
-
-     #purity #ari, ami, nmi, homogeneity, completeness,
-
-# Exemplo de uso
-# result = Clustering(dados, target, DR_method='PCA', cluster='kmeans')
-
 
 
 '''
 Produces scatter plots of the 2D mappings
 '''
-def PlotaDados(dados, labels, metodo, CLUSTER):
+def PlotaDados(dados, labels, metodo):
     # Number of classes
     nclass = len(np.unique(labels))
     # Converts list to an array
@@ -391,10 +425,85 @@ def PlotaDados(dados, labels, metodo, CLUSTER):
         cor = cores[i]
         plt.scatter(dados[indices, 0], dados[indices, 1], c=cor, marker='*')
     # Save figure in image fila
-    nome_arquivo = 'images/' + metodo + '_' + CLUSTER + '.png'
+    nome_arquivo = 'images/' + metodo + '_gmm.png'
     plt.title(metodo+' clusters')
     plt.savefig(nome_arquivo)
     plt.close()
+
+
+# C-ISOMAP implementation
+def CIsomap(dados, k, d):
+    # Generate KNN graph
+    knnGraph = kneighbors_graph(dados, n_neighbors=k, mode='distance')
+    # Computes geodesic distances
+    A = knnGraph.toarray()
+
+    n, m = dados.shape
+    matriz_md = np.zeros((n, n))
+
+    # Computes the mean distance of a point X_i to its neighbors
+    for i in range(n):       
+        vizinhos = A[i, :]
+        indices = vizinhos.nonzero()[0]
+        if len(indices) == 0:  # Isolated points
+            matriz_md[i, i] = 1  # Valor arbitrário para pontos sem vizinhos
+        else:
+            # Obtenha as amostras (vizinhos) do ponto i
+            amostras = dados[indices]
+            
+            # Coordenadas do ponto i (usar o próprio ponto, não o primeiro vizinho)
+            ponto_i = dados[i]
+            
+            # Calcular as distâncias entre ponto_i e seus vizinhos
+            distancias = np.linalg.norm(amostras - ponto_i, axis=1)
+            
+            # Calcular a média das distâncias
+            media_distancia = np.mean(distancias)
+            
+            # Armazenar o resultado na matriz de distâncias médias
+            matriz_md[i, i] = media_distancia
+
+    B = A.copy()
+
+    for i in range(n):
+        for j in range(i,n):
+            if B[i,j] > 0:
+                if matriz_md[i,i] == 0 or matriz_md[j,j] == 0:
+                    B[i,j] = 0
+                else:
+                    B[i,j] = B[i,j] / np.sqrt(matriz_md[i,i] * matriz_md[j,j])
+
+            B[j,i]=B[i,j]
+
+    # Computes shortest paths using Dijkstra's algorithm
+    D = graph_shortest_path(B, directed=False, return_predecessors=False)
+    n = D.shape[0]
+
+    # Computes centering matrix H
+    H = np.eye(n, n) - (1/n) * np.ones((n, n))
+    
+    # Computes the inner products matrix B
+    V = -0.5 * H.dot(D**2).dot(H)
+    
+    # Eigeendecomposition
+    lambdas, alphas = sp.linalg.eigh(V)
+    
+    # Sort eigenvalues and eigenvectors
+    indices = lambdas.argsort()[::-1]
+    lambdas = lambdas[indices]
+    alphas = alphas[:, indices]
+    
+    # Ensure non-negative eigenvalues
+    lambdas = np.maximum(lambdas, 0)
+    
+    # Select the d largest eigenvectors
+    lambdas = lambdas[0:d]
+    alphas = alphas[:, 0:d]
+    
+    # Computes the intrinsic coordinates
+    output = alphas * np.sqrt(lambdas)
+    
+    return output
 
 
 ##################### Beginning of thescript

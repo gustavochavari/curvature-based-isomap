@@ -11,7 +11,7 @@ Created on Sat May 25 13:41:56 2024
 
 # Imports
 import sys
-sys.path.append('C:/Users/Gustavo/Documents/Mestrado/curvature-based-isomap/functions')
+#sys.path.append('C:/Users/Gustavo/Documents/Mestrado/curvature-based-isomap/functions')
 
 import repliclust
 import warnings
@@ -199,3 +199,78 @@ plt.savefig('swiss_roll.jpeg',format='jpeg',dpi=300)
 plt.close()
 
 df.to_csv('swiss_roll_data.csv', index=False)
+
+
+####################################
+#################### 3D CUBE #######
+
+
+# Criando uma grade tridimensional
+x = np.linspace(-5, 5, 11)  # 11 pontos de -5 a 5
+y = np.linspace(-5, 5, 11)
+z = np.linspace(-5, 5, 11)
+X, Y, Z = np.meshgrid(x, y, z)
+
+# Remodelando para obter um array 3D
+X3 = np.array([X.flatten(), Y.flatten(), Z.flatten()]).T
+
+X3 = X3.astype(np.float64)
+
+# Parameters
+noise_scale = 1  # adjust the noise gaussian parameter here
+
+# Add noise
+# Definir a magnitude do ruído gaussiano
+magnitude = np.linspace(0,1,11)
+# Gerar ruído gaussiano com média zero e desvio padrão baseado na magnitude
+ruido = np.random.normal(0, scale=magnitude[0], size=X3.shape)
+# Adicionar o ruído aos dados
+# Surface equation
+X3.T[0] = X3.T[0] + ruido.T[0]
+X3.T[1] = X3.T[1] + ruido.T[1]
+X3.T[2] = X3.T[2] + ruido.T[2]
+
+fig = plt.figure(figsize=(12,5))
+
+# 3D
+ax1 = fig.add_subplot(131,projection='3d')  
+ax1.scatter(X3.T[0], X3.T[1], X3.T[2], c=[cm.rainbow(valor) for valor in X3.T[2]/10+0.5], marker='.')
+#ax1.view_init(elev=30, azim=30)
+ax1.set_title('3D Cube')  
+ax1.axis('off')
+#ax1.set_xlim3d(-10, 5)
+#ax1.set_ylim3d(-10, 5)
+#ax1.set_zlim3d(-7, 5)
+#ax1.set_xlim(-10, 5)
+#ax1.set_ylim(-10, 5)
+# Projecting the points onto the xy-plane by plotting them with a fixed z-coordinate that matches the lower z-limit.
+ax1.scatter(X3.T[0]+3, X3.T[1]-10, -7*np.ones_like(X3.T[2]),
+            c='gray',alpha=0.005)
+
+
+model = Isomap(n_neighbors=7, n_components=2)
+dados_isomap = model.fit_transform(X3)
+dados_isomap = dados_isomap.T
+
+kiso = KIsomap(X3, 7, 2, 0)
+
+# 2D
+ax2 = fig.add_subplot(132)  
+ax2.scatter(dados_isomap[0], dados_isomap[1],c=[cm.rainbow(valor) for valor in X3.T[2]/10+0.5], alpha=0.5)
+ax2.set_title('ISOMAP Embedding')  
+ax2.axis('off')
+#ax2.set_xlim(-60, 60)
+#ax2.set_ylim(-30, 30)
+
+# 2D
+x_2d = kiso.T[0]
+y_2d = kiso.T[1]
+ax3 = fig.add_subplot(133)  
+ax3.scatter(x_2d/2, y_2d/2, c=[cm.rainbow(valor) for valor in X3.T[2]/10+0.5], alpha=0.3)
+ax3.set_title('K-ISOMAP Embedding')  
+ax3.axis('off')
+#ax3.set_xlim(-30, 30)
+#ax3.set_ylim(-13, 13)
+
+plt.savefig('3d_cube.png',format='png',dpi=300)
+plt.show()
