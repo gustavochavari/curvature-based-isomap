@@ -44,6 +44,7 @@ from scipy import sparse
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.metrics.cluster import (rand_score, calinski_harabasz_score, 
 fowlkes_mallows_score, v_measure_score, silhouette_score, davies_bouldin_score)
+from microstructpy import geometry
 
 # To avoid unnecessary warning messages
 warnings.simplefilter(action='ignore')
@@ -129,7 +130,9 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     for i in range(n):
         for j in range(i,n):
             if B[i, j] > 0:
+                # Select the d principal components 
                 delta = norm(matriz_pcs[i, :, :d+1] - matriz_pcs[j, :, :d+1], axis=0)
+                
                 ##### Functions of the principal curvatures (definition of the metric)
                 # We must choose one single option for each execution
                 if option == 0:
@@ -153,12 +156,11 @@ def KIsomap(dados, k, d, option, alpha=0.5):
                 elif option == 9:
                     B[i, j] = 1 - np.exp(-delta.mean())     # metric A9 - Negative exponential kernel
                 else:
-                    B[i, j] = ((1-alpha)*A[i, j]/sum(A[i, :]) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
+                    B[i, j] = ((1-alpha)*(A[i, j]/sum(A[i, :])) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
             
             # Simmetry
             B[j,i]=B[i,j]
                  
-    
                 
     # Computes geodesic distances using the previous selected metric
     G = nx.from_numpy_array(B)
@@ -225,15 +227,15 @@ def KGraph(dados, k, d, option, alpha=0.5):
             stacklevel=2,
         )
 
-        # Corrigir componentes conectados
+        # Corrigir componentes desconexas
         nbg = _fix_connected_components(
             X=dados,
             graph=knnGraph,
             n_connected_components=n_connected_components,
             component_labels=labels,
             mode="distance",
-            metric='euclidean',  # Substitua por sua métrica de distância
-            # Adicione parâmetros adicionais de métrica se necessário
+            metric='euclidean',  
+
         )
 
         A = nbg.toarray()
@@ -265,7 +267,9 @@ def KGraph(dados, k, d, option, alpha=0.5):
     for i in range(n):
         for j in range(i,n):
             if B[i, j] > 0:
+                # Select the d principal components 
                 delta = norm(matriz_pcs[i, :, :d+1] - matriz_pcs[j, :, :d+1], axis=0)
+
                 ##### Functions of the principal curvatures (definition of the metric)
                 # We must choose one single option for each execution
                 if option == 0:
@@ -304,12 +308,6 @@ def _fix_connected_components(
     mode="distance",
     metric="euclidean",
     **kwargs):
-    if metric == "precomputed" and sparse.issparse(X):
-        raise RuntimeError(
-            "_fix_connected_components with metric='precomputed' requires the "
-            "full distance matrix in X, and does not work with a sparse "
-            "neighbors graph."
-        )
 
     for i in range(n_connected_components):
         idx_i = np.flatnonzero(component_labels == i)
@@ -365,8 +363,8 @@ def Clustering(dados, target, DR_method):
             'ri': ri,
             'ch': ch,
             'fm': fm,
-            'v': v,
-            's': s,
+            'vs': v,
+            'ss': s,
             'db': db,
             'labels': labels
         }
@@ -504,9 +502,3 @@ def CIsomap(dados, k, d):
     output = alphas * np.sqrt(lambdas)
     
     return output
-
-
-##################### Beginning of thescript
-
-#####################  Data loading
-

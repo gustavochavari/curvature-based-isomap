@@ -1,0 +1,1361 @@
+------------------------------------------
+------------  1st battery  ---------------
+------------------------------------------
+
+
+servo
+n =  167
+m =  4
+c =  2
+d =  3
+k =  12
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  8
+Best metric for FM:  6
+Best metric for VS:  3
+Best metric for SS:  8
+Best metric for DB:  7
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset servo completed.
+
+
+car-evaluation
+n =  1728
+m =  21
+c =  4
+d =  4
+k =  41
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  5
+Best metric for CH:  8
+Best metric for FM:  7
+Best metric for VS:  8
+Best metric for SS:  8
+Best metric for DB:  6
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset car-evaluation completed.
+
+
+breast-tissue
+n =  106
+m =  9
+c =  4
+d =  2
+k =  10
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  4
+Best metric for CH:  8
+Best metric for FM:  1
+Best metric for VS:  1
+Best metric for SS:  8
+Best metric for DB:  0
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset breast-tissue completed.
+
+
+Engine1
+n =  383
+m =  5
+c =  3
+d =  3
+k =  19
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  9
+Best metric for CH:  6
+Best metric for FM:  9
+Best metric for VS:  9
+Best metric for SS:  7
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset Engine1 completed.
+
+
+xd6
+n =  973
+m =  9
+c =  2
+d =  2
+k =  31
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  1
+Best metric for FM:  7
+Best metric for VS:  6
+Best metric for SS:  1
+Best metric for DB:  6
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset xd6 completed.
+
+
+steel-plates-fault
+n =  1941
+m =  27
+c =  7
+d =  4
+k =  44
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  10
+Best metric for CH:  7
+Best metric for FM:  3
+Best metric for VS:  7
+Best metric for SS:  6
+Best metric for DB:  2
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset steel-plates-fault completed.
+
+
+PhishingWebsites
+n =  1105
+m =  30
+c =  2
+d =  2
+k =  33
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  7
+Best metric for CH:  5
+Best metric for FM:  5
+Best metric for VS:  7
+Best metric for SS:  6
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset PhishingWebsites completed.
+
+
+satimage
+n =  1607
+m =  36
+c =  6
+d =  7
+k =  40
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  1
+Best metric for CH:  7
+Best metric for FM:  6
+Best metric for VS:  1
+Best metric for SS:  2
+Best metric for DB:  1
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset satimage completed.
+
+
+led24
+n =  800
+m =  24
+c =  10
+d =  13
+k =  28
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  6
+Best metric for FM:  0
+Best metric for VS:  0
+Best metric for SS:  6
+Best metric for DB:  3
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset led24 completed.
+
+
+hayes-roth
+n =  132
+m =  4
+c =  2
+d =  2
+k =  11
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  5
+Best metric for CH:  8
+Best metric for FM:  5
+Best metric for VS:  1
+Best metric for SS:  8
+Best metric for DB:  9
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset hayes-roth completed.
+
+
+rabe_131
+n =  50
+m =  2
+c =  2
+d =  2
+k =  7
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  2
+Best metric for FM:  6
+Best metric for VS:  6
+Best metric for SS:  2
+Best metric for DB:  6
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset rabe_131 completed.
+
+
+prnn_synth
+n =  250
+m =  2
+c =  2
+d =  2
+k =  15
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  8
+Best metric for CH:  2
+Best metric for FM:  8
+Best metric for VS:  8
+Best metric for SS:  7
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset prnn_synth completed.
+
+
+visualizing_environmental
+n =  111
+m =  3
+c =  2
+d =  2
+k =  10
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  0
+Best metric for CH:  1
+Best metric for FM:  9
+Best metric for VS:  0
+Best metric for SS:  1
+Best metric for DB:  2
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset visualizing_environmental completed.
+
+
+diggle_table_a2
+n =  310
+m =  8
+c =  2
+d =  2
+k =  17
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  8
+Best metric for CH:  10
+Best metric for FM:  8
+Best metric for VS:  9
+Best metric for SS:  2
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset diggle_table_a2 completed.
+
+
+newton_hema
+n =  140
+m =  3
+c =  2
+d =  2
+k =  11
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  1
+Best metric for FM:  8
+Best metric for VS:  6
+Best metric for SS:  8
+Best metric for DB:  7
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset newton_hema completed.
+
+
+wisconsin
+n =  194
+m =  32
+c =  2
+d =  7
+k =  13
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  1
+Best metric for CH:  5
+Best metric for FM:  8
+Best metric for VS:  1
+Best metric for SS:  8
+Best metric for DB:  6
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset wisconsin completed.
+
+
+conference_attendance
+n =  246
+m =  5
+c =  2
+d =  2
+k =  15
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  7
+Best metric for CH:  2
+Best metric for FM:  7
+Best metric for VS:  7
+Best metric for SS:  6
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset conference_attendance completed.
+
+
+tic-tac-toe
+n =  958
+m =  9
+c =  2
+d =  8
+k =  30
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  2
+Best metric for FM:  1
+Best metric for VS:  6
+Best metric for SS:  2
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset tic-tac-toe completed.
+
+
+qsar-biodeg
+n =  1055
+m =  2
+c =  2
+d =  2
+k =  32
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  2
+Best metric for CH:  8
+Best metric for FM:  2
+Best metric for VS:  2
+Best metric for SS:  5
+Best metric for DB:  10
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset qsar-biodeg completed.
+
+
+cmc
+n =  1473
+m =  9
+c =  3
+d =  2
+k =  38
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  2
+Best metric for CH:  6
+Best metric for FM:  3
+Best metric for VS:  5
+Best metric for SS:  6
+Best metric for DB:  1
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset cmc completed.
+
+
+heart-statlog
+n =  270
+m =  13
+c =  2
+d =  6
+k =  16
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  1
+Best metric for CH:  1
+Best metric for FM:  1
+Best metric for VS:  8
+Best metric for SS:  1
+Best metric for DB:  3
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset heart-statlog completed.
+
+
+------------------------------------------
+------------  2nd battery  ---------------
+------------------------------------------
+
+AP_Omentum_Kidney
+n =  337
+m =  50
+c =  2
+d =  7
+k =  18
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  0
+Best metric for CH:  6
+Best metric for FM:  0
+Best metric for VS:  0
+Best metric for SS:  6
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset AP_Omentum_Kidney completed.
+
+
+olivetti-faces
+n =  400
+m =  100
+c =  40
+d =  6
+k =  20
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  6
+Best metric for FM:  6
+Best metric for VS:  6
+Best metric for SS:  7
+Best metric for DB:  5
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset olivetti-faces completed.
+
+
+coil-20
+n =  1440
+m =  100
+c =  20
+d =  2
+k =  37
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  2
+Best metric for CH:  6
+Best metric for FM:  7
+Best metric for VS:  7
+Best metric for SS:  6
+Best metric for DB:  3
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset coil-20 completed.
+
+
+Pen-Digits
+n =  7494
+m =  16
+c =  10
+d =  4
+k =  86
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  7
+Best metric for CH:  7
+Best metric for FM:  7
+Best metric for VS:  7
+Best metric for SS:  7
+Best metric for DB:  3
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset Pen-Digits completed.
+
+
+MNIST
+n =  6000
+m =  100
+c =  10
+d =  8
+k =  77
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  7
+Best metric for CH:  6
+Best metric for FM:  7
+Best metric for VS:  7
+Best metric for SS:  6
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset MNIST completed.
+
+F-MNIST
+n =  6000
+m =  100
+c =  10
+d =  9
+k =  77
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  0
+Best metric for FM:  0
+Best metric for VS:  6
+Best metric for SS:  1
+Best metric for DB:  7
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset F-MNIST completed.
+
+
+cnae-9
+n =  1080
+m =  50  
+c =  9   
+d =  2   
+k =  32  
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  1
+Best metric for CH:  6
+Best metric for FM:  1
+Best metric for VS:  1
+Best metric for SS:  6
+Best metric for DB:  7
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset cnae-9 completed.
+
+
+AP_Breast_Kidney
+n =  604
+m =  12
+c =  2
+d =  5
+k =  24
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  1
+Best metric for CH:  1
+Best metric for FM:  1
+Best metric for VS:  1
+Best metric for SS:  1
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset AP_Breast_Kidney completed.
+
+
+AP_Endometrium_Breast
+n =  405
+m =  50
+c =  2
+d =  9
+k =  20
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  7
+Best metric for CH:  6
+Best metric for FM:  7
+Best metric for VS:  7
+Best metric for SS:  6
+Best metric for DB:  3
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset AP_Endometrium_Breast completed.
+
+
+AP_Ovary_Lung
+n =  324
+m =  20
+c =  2
+d =  7
+k =  18
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  0
+Best metric for CH:  1
+Best metric for FM:  0
+Best metric for VS:  0
+Best metric for SS:  1
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset AP_Ovary_Lung completed.
+
+
+OVA_Uterus
+n =  1545
+m =  100
+c =  2
+d =  9
+k =  39
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  4
+Best metric for CH:  1
+Best metric for FM:  4
+Best metric for VS:  5
+Best metric for SS:  1
+Best metric for DB:  6
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset OVA_Uterus completed.
+
+
+micro-mass
+n =  360
+m =  100
+c =  10
+d =  4
+k =  18
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  6
+Best metric for CH:  0
+Best metric for FM:  6
+Best metric for VS:  6
+Best metric for SS:  10
+Best metric for DB:  7
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset micro-mass completed.
+
+har
+n =  1029
+m =  100
+c =  6
+d =  13
+k =  32
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  2
+Best metric for CH:  6
+Best metric for FM:  6
+Best metric for VS:  2
+Best metric for SS:  6
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset har completed.
+
+oh5.wc
+n =  918
+m =  3
+c =  10
+d =  3
+k =  30
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  0
+Best metric for CH:  8
+Best metric for FM:  0
+Best metric for VS:  9
+Best metric for SS:  8
+Best metric for DB:  9
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset oh5.wc completed.
+
+
+leukemia
+n =  72
+m =  3
+c =  2
+d =  2
+k =  8
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  1
+Best metric for CH:  8
+Best metric for FM:  1
+Best metric for VS:  1
+Best metric for SS:  8
+Best metric for DB:  1
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset leukemia completed.
+
+fri_c4_250_100
+n =  250
+m =  100
+c =  2
+d =  33
+k =  15
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  1
+Best metric for CH:  7
+Best metric for FM:  4
+Best metric for VS:  1
+Best metric for SS:  7
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset fri_c4_250_100 completed.
+
+
+eating
+n =  945
+m =  100
+c =  7
+d =  12
+k =  30
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  5
+Best metric for CH:  6
+Best metric for FM:  5
+Best metric for VS:  5
+Best metric for SS:  6
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset eating completed.
+
+semeion
+n =  1593
+m =  20
+c =  10
+d =  6
+k =  39
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  0
+Best metric for CH:  6
+Best metric for FM:  0
+Best metric for VS:  0
+Best metric for SS:  6
+Best metric for DB:  0
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset semeion completed.
+
+
+USPS
+n =  1424
+m =  20
+c =  2
+d =  7
+k =  37
+KISOMAP run:  0
+KISOMAP run:  1
+KISOMAP run:  2
+KISOMAP run:  3
+KISOMAP run:  4
+KISOMAP run:  5
+KISOMAP run:  6
+KISOMAP run:  7
+KISOMAP run:  8
+KISOMAP run:  9
+KISOMAP run:  10
+K-ISOMAP results
+Best metric for RI:  0
+Best metric for CH:  6
+Best metric for FM:  2
+Best metric for VS:  2
+Best metric for SS:  6
+Best metric for DB:  8
+ISOMAP results
+UMAP results
+Kernel PCA results
+t-SNE results
+Laplacian Eigenmaps results
+LLE results
+RAW results
+Dataset USPS completed.
+

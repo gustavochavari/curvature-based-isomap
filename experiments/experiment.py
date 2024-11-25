@@ -3,6 +3,7 @@
 Unsupervised metric learning via K-ISOMAP for high-dimensional data clustering - Noise experiments
 
 Created on Wed May 09 14:55:26 2024
+Modified on Mon Nov 25 13:23:36 2024
 
 """
 # Imports
@@ -55,55 +56,54 @@ def normalize_metrics(metrics_dict):
 datasets = [# First set of experiments
     #{"db": skdata.fetch_openml(name='servo', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
     #{"db": skdata.fetch_openml(name='car-evaluation', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='breast-tissue', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
+    #{"db": skdata.fetch_openml(name='breast-tissue', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
     #{"db": skdata.fetch_openml(name='Engine1', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
     #{"db": skdata.fetch_openml(name='xd6', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='heart-h', version=3), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
     #{"db": skdata.fetch_openml(name='steel-plates-fault', version=3), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='PhishingWebsites', version=1), "reduce_samples": True, "percentage":.1, "reduce_dim":False, "num_features": 0},           # 10% of the samples
-    #{"db": skdata.fetch_openml(name='satimage', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                  # 25% of the samples
-    #{"db": skdata.fetch_openml(name='led24', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                     # 25% of the samples
+    #{"db": skdata.fetch_openml(name='PhishingWebsites', version=1), "reduce_samples": True, "percentage":.1, "reduce_dim":False, "num_features": 0},       
+    #{"db": skdata.fetch_openml(name='satimage', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                  
+    #{"db": skdata.fetch_openml(name='led24', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                     
     #{"db": skdata.fetch_openml(name='hayes-roth', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='rabe_131', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+    #{"db": skdata.fetch_openml(name='rabe_131', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 2},
     #{"db": skdata.fetch_openml(name='prnn_synth', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
     #{"db": skdata.fetch_openml(name='visualizing_environmental', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
     #{"db": skdata.fetch_openml(name='diggle_table_a2', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
     #{"db": skdata.fetch_openml(name='newton_hema', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
     #{"db": skdata.fetch_openml(name='wisconsin', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='conference_attendance', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+    #{"db": skdata.fetch_openml(name='conference_attendance', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 5},
     #{"db": skdata.fetch_openml(name='tic-tac-toe', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='qsar-biodeg', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='spambase', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                  # 25% of the samples
-    #{"db": skdata.fetch_openml(name='cmc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
-    #{"db": skdata.fetch_openml(name='heart-statlog', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    
+    #{"db": skdata.fetch_openml(name='qsar-biodeg', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 2}]             
+    #{"db": skdata.fetch_openml(name='cmc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+    #{"db": skdata.fetch_openml(name='heart-statlog', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
+
     ############################
     ##Second set of experiments
-    {"db": skdata.fetch_openml(name='cnae-9', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 50}]                    # 50-D
-    #{"db": skdata.fetch_openml(name='AP_Breast_Kidney', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 500},          # 500-D
-    #{"db": skdata.fetch_openml(name='AP_Endometrium_Breast', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 400},     # 400-D
-    #{"db": skdata.fetch_openml(name='AP_Ovary_Lung', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},             # 100-D
-    #{"db": skdata.fetch_openml(name='OVA_Uterus', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},                # 100-D
-    #{"db": skdata.fetch_openml(name='micro-mass', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},                # 100-D
-    #{"db": skdata.fetch_openml(name='har', version=1), "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features": 100},                      # 100-D and 10%  of the samples and 
-    #{"db": skdata.fetch_openml(name='eating', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},                    # 100-D
-    #{"db": skdata.fetch_openml(name='oh5.wc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 40},                     # 40-D
-    #{"db": skdata.fetch_openml(name='leukemia', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 40},                  # 40-D
-    #{"db": skdata.fetch_openml(name='fri_c4_250_100', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+    {"db": skdata.fetch_openml(name='cnae-9', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 50},                
+    #{"db": skdata.fetch_openml(name='AP_Breast_Kidney', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 12},        
+    #{"db": skdata.fetch_openml(name='AP_Endometrium_Breast', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 50},     
+    #{"db": skdata.fetch_openml(name='AP_Ovary_Lung', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 20},          
+    #{"db": skdata.fetch_openml(name='OVA_Uterus', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},             
+    #{"db": skdata.fetch_openml(name='micro-mass', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},               
+    #{"db": skdata.fetch_openml(name='har', version=1), "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features": 100},                      
+    #{"db": skdata.fetch_openml(name='eating', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100}]                   
+    #{"db": skdata.fetch_openml(name='oh5.wc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 3},                   
+    {"db": skdata.fetch_openml(name='leukemia', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 3}] 
+    #{"db": skdata.fetch_openml(name='semeion', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 20}]              
+    #{"db": skdata.fetch_openml(name='fri_c4_250_100', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
+    #{"db": skdata.fetch_openml(name='usps', version=3), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 20}]   
 
     ############################################## 
     # TO RUN THESE DATASETS, SEE other_datasets.py
     ##############################################
-    #{"db": magic_telescope, "reduce_samples": True, "percentage":0.5, "reduce_dim":False, "num_features":0},                             # 50% of the samples
-    #{"db": omentum_kidney, "reduce_samples": False, "percentage":0.5, "reduce_dim":True, "num_features":100},                                                   # 20-D
-    #{"db": olivetti, "reduce_samples": False, "percentage":0.5, "reduce_dim":True, "num_features":100},                                                            # 100-D
-    #{"db": coil_20, "reduce_samples": False, "percentage":0.2, "reduce_dim":True, "num_features":200},                                                          # 100-D 10% of the samples
+    #{"db": omentum_kidney, "reduce_samples": False, "percentage":0.5, "reduce_dim":True, "num_features":100},                                                  
+    #{"db": olivetti, "reduce_samples": False, "percentage":0.5, "reduce_dim":True, "num_features":100},                                                           
+    #{"db": coil_20, "reduce_samples": False, "percentage":0.2, "reduce_dim":True, "num_features":100},                                                          
     #{"db": pen_digits, "reduce_samples": False, "percentage":0.1, "reduce_dim":False, "num_features":0},                                                       
-    #{"db": mnist, "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features":200},                                                          # 200-D and 10% of the samples
-    #{"db": fmnist, "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features":200}]                                                           # 200-D and 10% of the samples
+    #{"db": mnist, "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features":100},                                                   
+    #{"db": fmnist, "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features":200}]                                                        
     
-# If True creates 2d plots
-plot_results = True
+# If True creates 2D plots
+plot_results = False
 
 magnitude = np.linspace(0, 0, 1)
 
@@ -117,6 +117,10 @@ for dataset in datasets:
     dataset_data = X['data']
     dataset_target = X['target']
     dataset_name = X['details']['name']
+    reduce_samples = dataset["reduce_samples"]
+    reduce_dim = dataset["reduce_dim"]
+
+
     # Convert labels to integers
     label_list = []
     for x in dataset_target:
@@ -152,9 +156,6 @@ for dataset in datasets:
     # Data standardization (to deal with variables having different units/scales)
     dataset_data = preprocessing.scale(dataset_data).astype(np.float64)
 
-    # OPTIONAL: set this flag to True to reduce the number of samples
-    reduce_samples = dataset["reduce_samples"]
-    reduce_dim = dataset["reduce_dim"]
 
     if not reduce_samples and not reduce_dim:
         raw_data = dataset_data
@@ -180,15 +181,17 @@ for dataset in datasets:
     else: 
         d_star = int(np.floor(MLE.dimension_)) 
 
+    # Number of neighbors in KNN graph (patch size)
+    nn = int(np.floor(np.sqrt(n)))  
+
     # Print data info
     print(dataset_name)
-    print('N = ', n)
-    print('M = ', m)
-    print('C = %d' %c)
-    print('D = %d' %d_star)
-    
-    # Number of neighbors in KNN graph (patch size)
-    nn = round(np.sqrt(n))     
+    print('n = ', n)
+    print('m = ', m)
+    print('c = ', c)
+    print('d = ', d_star)
+    print('k = ', nn)
+   
    
     # K-ISOMAP results
     ri_kiso, ch_kiso, fm_kiso, v_kiso, s_kiso, db_kiso, ac_kiso = [], [], [], [], [], [], []
@@ -250,20 +253,20 @@ for dataset in datasets:
             ri_kmeans.append(L_kiso['KMeans']['ri'])
             ch_kmeans.append(L_kiso['KMeans']['ch'])
             fm_kmeans.append(L_kiso['KMeans']['fm'])
-            v_kmeans.append(L_kiso['KMeans']['v'])
-            s_kmeans.append(L_kiso['KMeans']['s'])
+            v_kmeans.append(L_kiso['KMeans']['vs'])
+            s_kmeans.append(L_kiso['KMeans']['ss'])
             db_kmeans.append(L_kiso['KMeans']['db'])
             ri_gmm.append(L_kiso['GMM']['ri'])
             ch_gmm.append(L_kiso['GMM']['ch'])
             fm_gmm.append(L_kiso['GMM']['fm'])
-            v_gmm.append(L_kiso['GMM']['v'])
-            s_gmm.append(L_kiso['GMM']['s'])
+            v_gmm.append(L_kiso['GMM']['vs'])
+            s_gmm.append(L_kiso['GMM']['ss'])
             db_gmm.append(L_kiso['GMM']['db'])
             ri_ward.append(L_kiso['Ward']['ri'])
             ch_ward.append(L_kiso['Ward']['ch'])
             fm_ward.append(L_kiso['Ward']['fm'])
-            v_ward.append(L_kiso['Ward']['v'])
-            s_ward.append(L_kiso['Ward']['s'])
+            v_ward.append(L_kiso['Ward']['vs'])
+            s_ward.append(L_kiso['Ward']['ss'])
             db_ward.append(L_kiso['Ward']['db'])
     finish = time.time()
     print('K-ISOMAP results')
@@ -272,6 +275,8 @@ for dataset in datasets:
     # Find best result in terms of Rand index of metric function
     ri_star_kmeans = max(ri_kmeans,default=0)
     ri_star_gmm = max(ri_gmm,default=0)
+    if ri_star_gmm > 0:
+        print('Best metric for RI: ',ri_gmm.index(ri_star_gmm))
     ri_star_ward = max(ri_ward,default=0)
     ri_kiso.append([ri_star_kmeans,ri_star_gmm,ri_star_ward])
     ri_best_metric.append([ri_kmeans.index(ri_star_kmeans),ri_gmm.index(ri_star_gmm),ri_ward.index(ri_star_ward)])
@@ -279,24 +284,32 @@ for dataset in datasets:
     # Find best result in terms of Calinski-Harabasz Score of metric function
     ch_star_kmeans = max(ch_kmeans, default=0)
     ch_star_gmm = max(ch_gmm, default=0)
+    if ch_star_gmm > 0:
+        print('Best metric for CH: ',ch_gmm.index(np.nan_to_num(ch_star_gmm)))
     ch_star_ward = max(ch_ward, default=0)
     ch_kiso.append([ch_star_kmeans, ch_star_gmm, ch_star_ward])
     ch_best_metric.append([ch_kmeans.index(ch_star_kmeans), ch_gmm.index(ch_star_gmm), ch_ward.index(ch_star_ward)])
     # Find best result in terms of Fowlkes-Mallows Score of metric function
     fm_star_kmeans = max(fm_kmeans, default=0)
     fm_star_gmm = max(fm_gmm, default=0)
+    if fm_star_gmm > 0:
+        print('Best metric for FM: ',fm_gmm.index(fm_star_gmm))
     fm_star_ward = max(fm_ward, default=0)
     fm_kiso.append([fm_star_kmeans, fm_star_gmm, fm_star_ward])
     fm_best_metric.append([fm_kmeans.index(fm_star_kmeans), fm_gmm.index(fm_star_gmm), fm_ward.index(fm_star_ward)])
     # Find best result in terms of V-measure of metric function
     v_star_kmeans = max(v_kmeans, default=0)
     v_star_gmm = max(v_gmm, default=0)
+    if v_star_gmm > 0:
+        print('Best metric for VS: ',v_gmm.index(v_star_gmm))
     v_star_ward = max(v_ward, default=0)
     v_kiso.append([v_star_kmeans, v_star_gmm, v_star_ward])
     v_best_metric.append([v_kmeans.index(v_star_kmeans), v_gmm.index(v_star_gmm), v_ward.index(v_star_ward)])
     # Find best result in terms of Silhouette of metric function
     s_star_kmeans = max(s_kmeans, default=0)
     s_star_gmm = max(s_gmm, default=0)
+    if s_star_gmm > 0:
+        print('Best metric for SS: ',s_gmm.index(s_star_gmm))
     s_star_ward = max(s_ward, default=0)
 
     s_kiso.append([s_star_kmeans, s_star_gmm, s_star_ward])
@@ -304,6 +317,8 @@ for dataset in datasets:
     # Find best result in terms of Davies-Bouldin of metric function
     db_star_kmeans = max(db_kmeans, default=0)
     db_star_gmm = max(db_gmm, default=0)
+    if db_star_gmm > 0:
+        print('Best metric for DB: ',db_gmm.index(db_star_gmm))
     db_star_ward = max(db_ward, default=0)
     db_kiso.append([db_star_kmeans, db_star_gmm, db_star_ward])
     db_best_metric.append([db_kmeans.index(db_star_kmeans), db_gmm.index(db_star_gmm), db_ward.index(db_star_ward)])
@@ -319,13 +334,13 @@ for dataset in datasets:
     ri_iso.append([L_iso['KMeans']['ri'],L_iso['GMM']['ri'],L_iso['Ward']['ri']])
     ch_iso.append([L_iso['KMeans']['ch'],L_iso['GMM']['ch'],L_iso['Ward']['ch']])
     fm_iso.append([L_iso['KMeans']['fm'],L_iso['GMM']['fm'],L_iso['Ward']['fm']])
-    v_iso.append([L_iso['KMeans']['v'],L_iso['GMM']['v'],L_iso['Ward']['v']])
-    s_iso.append([L_iso['KMeans']['s'],L_iso['GMM']['s'],L_iso['Ward']['s']])
+    v_iso.append([L_iso['KMeans']['vs'],L_iso['GMM']['vs'],L_iso['Ward']['vs']])
+    s_iso.append([L_iso['KMeans']['ss'],L_iso['GMM']['ss'],L_iso['Ward']['ss']])
     db_iso.append([L_iso['KMeans']['db'],L_iso['GMM']['db'],L_iso['Ward']['db']])
     print('ISOMAP results')
     
     ############## UMAP
-    model = UMAP(n_components=d_star)
+    model = UMAP(n_components=d_star,n_neighbors=nn)
     umap_data = model.fit_transform(dataset_data)
     umap_data = umap_data.T
     DR_method = 'UMAP'
@@ -333,8 +348,8 @@ for dataset in datasets:
     ri_umap.append([L_umap['KMeans']['ri'],L_umap['GMM']['ri'],L_umap['Ward']['ri']])
     ch_umap.append([L_umap['KMeans']['ch'],L_umap['GMM']['ch'],L_umap['Ward']['ch']])
     fm_umap.append([L_umap['KMeans']['fm'],L_umap['GMM']['fm'],L_umap['Ward']['fm']])
-    v_umap.append([L_umap['KMeans']['v'],L_umap['GMM']['v'],L_umap['Ward']['v']])
-    s_umap.append([L_umap['KMeans']['s'],L_umap['GMM']['s'],L_umap['Ward']['s']])
+    v_umap.append([L_umap['KMeans']['vs'],L_umap['GMM']['vs'],L_umap['Ward']['vs']])
+    s_umap.append([L_umap['KMeans']['ss'],L_umap['GMM']['ss'],L_umap['Ward']['ss']])
     db_umap.append([L_umap['KMeans']['db'],L_umap['GMM']['db'],L_umap['Ward']['db']])
     print('UMAP results')
     
@@ -348,8 +363,8 @@ for dataset in datasets:
     ri_kpca.append([L_kpca['KMeans']['ri'],L_kpca['GMM']['ri'],L_kpca['Ward']['ri']])
     ch_kpca.append([L_kpca['KMeans']['ch'],L_kpca['GMM']['ch'],L_kpca['Ward']['ch']])
     fm_kpca.append([L_kpca['KMeans']['fm'],L_kpca['GMM']['fm'],L_kpca['Ward']['fm']])
-    v_kpca.append([L_kpca['KMeans']['v'],L_kpca['GMM']['v'],L_kpca['Ward']['v']])
-    s_kpca.append([L_kpca['KMeans']['s'],L_kpca['GMM']['s'],L_kpca['Ward']['s']])
+    v_kpca.append([L_kpca['KMeans']['vs'],L_kpca['GMM']['vs'],L_kpca['Ward']['vs']])
+    s_kpca.append([L_kpca['KMeans']['ss'],L_kpca['GMM']['ss'],L_kpca['Ward']['ss']])
     db_kpca.append([L_kpca['KMeans']['db'],L_kpca['GMM']['db'],L_kpca['Ward']['db']])
     print('Kernel PCA results')
 
@@ -362,14 +377,14 @@ for dataset in datasets:
     ri_tsne.append([L_tsne['KMeans']['ri'],L_tsne['GMM']['ri'],L_tsne['Ward']['ri']])
     ch_tsne.append([L_tsne['KMeans']['ch'],L_tsne['GMM']['ch'],L_tsne['Ward']['ch']])
     fm_tsne.append([L_tsne['KMeans']['fm'],L_tsne['GMM']['fm'],L_tsne['Ward']['fm']])
-    v_tsne.append([L_tsne['KMeans']['v'],L_tsne['GMM']['v'],L_tsne['Ward']['v']])
-    s_tsne.append([L_tsne['KMeans']['s'],L_tsne['GMM']['s'],L_tsne['Ward']['s']])
+    v_tsne.append([L_tsne['KMeans']['vs'],L_tsne['GMM']['vs'],L_tsne['Ward']['vs']])
+    s_tsne.append([L_tsne['KMeans']['ss'],L_tsne['GMM']['ss'],L_tsne['Ward']['ss']])
     db_tsne.append([L_tsne['KMeans']['db'],L_tsne['GMM']['db'],L_tsne['Ward']['db']])
     print('t-SNE results')
 
 
     # Laplacian Eigenmaps (Spectral Embedding)
-    model = SpectralEmbedding(n_components=d_star)
+    model = SpectralEmbedding(n_components=d_star, n_neighbors=nn)
     laplacian_data = model.fit_transform(dataset_data)
     laplacian_data = laplacian_data.T
     DR_method = 'Laplacian Eigenmaps'
@@ -377,8 +392,8 @@ for dataset in datasets:
     ri_laplacian.append([L_laplacian['KMeans']['ri'],L_laplacian['GMM']['ri'],L_laplacian['Ward']['ri']])
     ch_laplacian.append([L_laplacian['KMeans']['ch'],L_laplacian['GMM']['ch'],L_laplacian['Ward']['ch']])
     fm_laplacian.append([L_laplacian['KMeans']['fm'],L_laplacian['GMM']['fm'],L_laplacian['Ward']['fm']])
-    v_laplacian.append([L_laplacian['KMeans']['v'],L_laplacian['GMM']['v'],L_laplacian['Ward']['v']])
-    s_laplacian.append([L_laplacian['KMeans']['s'],L_laplacian['GMM']['s'],L_laplacian['Ward']['s']])
+    v_laplacian.append([L_laplacian['KMeans']['vs'],L_laplacian['GMM']['vs'],L_laplacian['Ward']['vs']])
+    s_laplacian.append([L_laplacian['KMeans']['ss'],L_laplacian['GMM']['ss'],L_laplacian['Ward']['ss']])
     db_laplacian.append([L_laplacian['KMeans']['db'],L_laplacian['GMM']['db'],L_laplacian['Ward']['db']])
     print('Laplacian Eigenmaps results')
 
@@ -391,8 +406,8 @@ for dataset in datasets:
     ri_LLE.append([L_LLE['KMeans']['ri'],L_LLE['GMM']['ri'],L_LLE['Ward']['ri']])
     ch_LLE.append([L_LLE['KMeans']['ch'],L_LLE['GMM']['ch'],L_LLE['Ward']['ch']])
     fm_LLE.append([L_LLE['KMeans']['fm'],L_LLE['GMM']['fm'],L_LLE['Ward']['fm']])
-    v_LLE.append([L_LLE['KMeans']['v'],L_LLE['GMM']['v'],L_LLE['Ward']['v']])
-    s_LLE.append([L_LLE['KMeans']['s'],L_LLE['GMM']['s'],L_LLE['Ward']['s']])
+    v_LLE.append([L_LLE['KMeans']['vs'],L_LLE['GMM']['vs'],L_LLE['Ward']['vs']])
+    s_LLE.append([L_LLE['KMeans']['ss'],L_LLE['GMM']['ss'],L_LLE['Ward']['ss']])
     db_LLE.append([L_LLE['KMeans']['db'],L_LLE['GMM']['db'],L_LLE['Ward']['db']])
     print('LLE results')
 
@@ -406,8 +421,8 @@ for dataset in datasets:
     ri_raw.append([L_['KMeans']['ri'],L_['GMM']['ri'],L_['Ward']['ri']])
     ch_raw.append([L_['KMeans']['ch'],L_['GMM']['ch'],L_['Ward']['ch']])
     fm_raw.append([L_['KMeans']['fm'],L_['GMM']['fm'],L_['Ward']['fm']])
-    v_raw.append([L_['KMeans']['v'],L_['GMM']['v'],L_['Ward']['v']])
-    s_raw.append([L_['KMeans']['s'],L_['GMM']['s'],L_['Ward']['s']])
+    v_raw.append([L_['KMeans']['vs'],L_['GMM']['vs'],L_['Ward']['vs']])
+    s_raw.append([L_['KMeans']['ss'],L_['GMM']['ss'],L_['Ward']['ss']])
     db_raw.append([L_['KMeans']['db'],L_['GMM']['db'],L_['Ward']['db']])
     print('RAW results')
 
@@ -439,11 +454,11 @@ for dataset in datasets:
             "kiso": fm_kiso, "iso": fm_iso, "umap": fm_umap, "raw": fm_raw,
             "kpca": fm_kpca, "tsne": fm_tsne, "laplacian": fm_laplacian, "LLE": fm_LLE
         },
-        "v": {
+        "vs": {
             "kiso": v_kiso, "iso": v_iso, "umap": v_umap, "raw": v_raw,
             "kpca": v_kpca, "tsne": v_tsne, "laplacian": v_laplacian, "LLE": v_LLE
         },
-        "s": {
+        "ss": {
             "kiso": s_kiso, "iso": s_iso, "umap": s_umap, "raw": s_raw,
             "kpca": s_kpca, "tsne": s_tsne, "laplacian": s_laplacian, "LLE": s_LLE
         },
@@ -487,23 +502,23 @@ for dataset in datasets:
     fm_LLE_norm = normalized_metrics["fm"]["LLE"]
 
 
-    v_kiso_norm = normalized_metrics["v"]["kiso"]
-    v_iso_norm = normalized_metrics["v"]["iso"]
-    v_umap_norm = normalized_metrics["v"]["umap"]
-    v_raw_norm = normalized_metrics["v"]["raw"]
-    v_kpca_norm = normalized_metrics["v"]["kpca"]
-    v_tsne_norm = normalized_metrics["v"]["tsne"]
-    v_laplacian_norm = normalized_metrics["v"]["laplacian"]
-    v_LLE_norm = normalized_metrics["v"]["LLE"]
+    v_kiso_norm = normalized_metrics["vs"]["kiso"]
+    v_iso_norm = normalized_metrics["vs"]["iso"]
+    v_umap_norm = normalized_metrics["vs"]["umap"]
+    v_raw_norm = normalized_metrics["vs"]["raw"]
+    v_kpca_norm = normalized_metrics["vs"]["kpca"]
+    v_tsne_norm = normalized_metrics["vs"]["tsne"]
+    v_laplacian_norm = normalized_metrics["vs"]["laplacian"]
+    v_LLE_norm = normalized_metrics["vs"]["LLE"]
 
-    s_kiso_norm = normalized_metrics["s"]["kiso"]
-    s_iso_norm = normalized_metrics["s"]["iso"]
-    s_umap_norm = normalized_metrics["s"]["umap"]
-    s_raw_norm = normalized_metrics["s"]["raw"]
-    s_kpca_norm = normalized_metrics["s"]["kpca"]
-    s_tsne_norm = normalized_metrics["s"]["tsne"]
-    s_laplacian_norm = normalized_metrics["s"]["laplacian"]
-    s_LLE_norm = normalized_metrics["s"]["LLE"]
+    s_kiso_norm = normalized_metrics["ss"]["kiso"]
+    s_iso_norm = normalized_metrics["ss"]["iso"]
+    s_umap_norm = normalized_metrics["ss"]["umap"]
+    s_raw_norm = normalized_metrics["ss"]["raw"]
+    s_kpca_norm = normalized_metrics["ss"]["kpca"]
+    s_tsne_norm = normalized_metrics["ss"]["tsne"]
+    s_laplacian_norm = normalized_metrics["ss"]["laplacian"]
+    s_LLE_norm = normalized_metrics["ss"]["LLE"]
 
     db_kiso_norm = normalized_metrics["db"]["kiso"]
     db_iso_norm = normalized_metrics["db"]["iso"]
@@ -527,7 +542,7 @@ for dataset in datasets:
     }
 
     # Salvar os resultados em um arquivo JSON (exemplo)
-    file_results = 'dataset_results_1st_battery.json'
+    file_results = 'plots.json'
 
     # Verifica se já existe o arquivo para não sobreescrever
     try:
@@ -544,138 +559,138 @@ for dataset in datasets:
     except IOError as e:
         print(f"An error occurred while writing to the file: {file_results} - {e}")
 
-    print('Dataset '+ dataset_name + ' completed.')
-
-if plot_results:
+    if plot_results:
     #*********************************************
     #******* SUMMARY OF THE RESULTS **************
     #*********************************************
 
-    # Find best result in terms of Rand index
-    ri_star = ri_gmm.index(max(ri_gmm))
-    DR_method = 'K-ISOMAP' 
-    try:
-        dados_kiso, _ = KIsomap(dataset_data, nn, 2, ri_star)     
-    except Exception as e:
-        print(DR_method + " -------- Plot KIsomap error:", e)
-        dados_kiso = []
-    L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
-    labels_kiso = L_kiso['GMM']['labels']
-    PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_RI')
-    print('Best K-ISOMAP metric in terms of Rand Index: ', ri_star)
+        # Find best result in terms of Rand index
+        ri_star = ri_gmm.index(max(ri_gmm,default=0))
+        DR_method = 'K-ISOMAP' 
+        try:
+            dados_kiso, _ = KIsomap(dataset_data, nn, 2, ri_star)     
+        except Exception as e:
+            print(DR_method + " -------- Plot KIsomap error:", e)
+            dados_kiso = []
+        L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
+        labels_kiso = L_kiso['GMM']['labels']
+        PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_RI')
+        print('Best K-ISOMAP metric in terms of Rand Index: ', ri_star)
 
-    # Find best result in terms of Calisnki-Harabasz
-    ch_star = ch_gmm.index(max(ch_gmm))
-    try:
-        dados_kiso, _ = KIsomap(dataset_data, nn, 2, ch_star)     
-    except Exception as e:
-        print(DR_method + " -------- Plot KIsomap error:", e)
-        dados_kiso = []
-    L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
-    labels_kiso = L_kiso['GMM']['labels']
-    PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_CH')
-    print('Best K-ISOMAP metric in terms of Calisnki-Harabasz: ', ch_star)
+        # Find best result in terms of Calisnki-Harabasz
+        ch_star = ch_gmm.index(max(ch_gmm))
+        try:
+            dados_kiso, _ = KIsomap(dataset_data, nn, 2, ch_star)     
+        except Exception as e:
+            print(DR_method + " -------- Plot KIsomap error:", e)
+            dados_kiso = []
+        L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
+        labels_kiso = L_kiso['GMM']['labels']
+        PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_CH')
+        print('Best K-ISOMAP metric in terms of Calisnki-Harabasz: ', ch_star)
 
-    # Find best result in terms of Fowlkes-Mallows
-    fm_star = fm_gmm.index(max(fm_gmm))
-    try:
-        dados_kiso, _ = KIsomap(dataset_data, nn, 2, fm_star)     
-    except Exception as e:
-        print(DR_method + " -------- Plot KIsomap error:", e)
-        dados_kiso = []
-    L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
-    labels_kiso = L_kiso['GMM']['labels']
-    PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_FM')
-    print('Best K-ISOMAP metric in terms of Fowlkes-Mallows: ', fm_star)
+        # Find best result in terms of Fowlkes-Mallows
+        fm_star = fm_gmm.index(max(fm_gmm,default=0))
+        try:
+            dados_kiso, _ = KIsomap(dataset_data, nn, 2, fm_star)     
+        except Exception as e:
+            print(DR_method + " -------- Plot KIsomap error:", e)
+            dados_kiso = []
+        L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
+        labels_kiso = L_kiso['GMM']['labels']
+        PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_FM')
+        print('Best K-ISOMAP metric in terms of Fowlkes-Mallows: ', fm_star)
 
-    # Find best result in terms of V-Measure
-    v_star = v_gmm.index(max(v_gmm))
-    try:
-        dados_kiso, _ = KIsomap(dataset_data, nn, 2, v_star)     
-    except Exception as e:
-        print(DR_method + " -------- Plot KIsomap error:", e)
-        dados_kiso = []
-    L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
-    labels_kiso = L_kiso['GMM']['labels']
-    PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_V')
-    print('Best K-ISOMAP metric in terms of V measure: ', v_star)
+        # Find best result in terms of V-Measure
+        v_star = v_gmm.index(max(v_gmm,default=0))
+        try:
+            dados_kiso, _ = KIsomap(dataset_data, nn, 2, v_star)     
+        except Exception as e:
+            print(DR_method + " -------- Plot KIsomap error:", e)
+            dados_kiso = []
+        L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
+        labels_kiso = L_kiso['GMM']['labels']
+        PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_V')
+        print('Best K-ISOMAP metric in terms of V measure: ', v_star)
 
-    # Find best result in terms of Silhuette Score
-    s_star = s_gmm.index(max(s_gmm))
-    try:
-        dados_kiso, _ = KIsomap(dataset_data, nn, 2, s_star)     
-    except Exception as e:
-        print(DR_method + " -------- Plot KIsomap error:", e)
-        dados_kiso = []
-    L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
-    labels_kiso = L_kiso['GMM']['labels']
-    PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_S')
-    print('Best K-ISOMAP metric in terms of Silhuette Score: ', s_star)
+        # Find best result in terms of Silhuette Score
+        s_star = s_gmm.index(max(s_gmm,default=0))
+        try:
+            dados_kiso, _ = KIsomap(dataset_data, nn, 2, s_star)     
+        except Exception as e:
+            print(DR_method + " -------- Plot KIsomap error:", e)
+            dados_kiso = []
+        L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
+        labels_kiso = L_kiso['GMM']['labels']
+        PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_S')
+        print('Best K-ISOMAP metric in terms of Silhuette Score: ', s_star)
 
-    # Find best result in terms of Davies-Bouldin
-    db_star = db_gmm.index(max(db_gmm))
-    try:
-        dados_kiso, _ = KIsomap(dataset_data, nn, 2, db_star)     
-    except Exception as e:
-        print(DR_method + " -------- Plot KIsomap error:", e)
-        dados_kiso = []
-    L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
-    labels_kiso = L_kiso['GMM']['labels']
-    PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_DB')
-    print('Best K-ISOMAP metric in terms of Davies-Bouldin: ', db_star)
+        # Find best result in terms of Davies-Bouldin
+        db_star = db_gmm.index(max(db_gmm,default=0))
+        try:
+            dados_kiso, _ = KIsomap(dataset_data, nn, 2, db_star)     
+        except Exception as e:
+            print(DR_method + " -------- Plot KIsomap error:", e)
+            dados_kiso = []
+        L_kiso = Clustering(dados_kiso.T, dataset_target, 'KISOMAP')
+        labels_kiso = L_kiso['GMM']['labels']
+        PlotaDados(dados_kiso, labels_kiso, dataset_name + '_KISOMAP_DB')
+        print('Best K-ISOMAP metric in terms of Davies-Bouldin: ', db_star)
 
-    ############## Regular ISOMAP 
-    print('ISOMAP results')
-    model = Isomap(n_neighbors=nn, n_components=2)
-    isomap_data = model.fit_transform(dataset_data)
-    isomap_data = isomap_data.T
-    L_iso = Clustering(isomap_data, dataset_target, 'ISOMAP')
-    labels_iso = L_iso['GMM']['labels']
-    PlotaDados(isomap_data.T, labels_iso, dataset_name + '_ISOMAP')
-    ############## UMAP
-    print('UMAP results')
-    model = UMAP(n_components=2)
-    umap_data = model.fit_transform(dataset_data)
-    umap_data = umap_data.T
-    L_umap = Clustering(umap_data, dataset_target, 'UMAP')
-    labels_umap = L_umap['GMM']['labels']
-    PlotaDados(umap_data.T, labels_umap, dataset_name + '_UMAP')
-    
-    
-    # Kernel PCA
-    print('Kernel PCA results')
-    model = KernelPCA(n_components=2, kernel='rbf')
-    kpca_data = model.fit_transform(dataset_data)
-    kpca_data = kpca_data.T
-    L_kpca = Clustering(kpca_data, dataset_target, 'KPCA')
-    labels_kpca = L_kpca['GMM']['labels']
-    PlotaDados(kpca_data.T, labels_kpca, dataset_name + '_KPCA')
-    
-    # t-SNE
-    print('t-SNE results')
-    model = TSNE(n_components=3, random_state=42, method='exact')
-    tsne_data = model.fit_transform(dataset_data)
-    tsne_data = tsne_data.T
-    L_tsne = Clustering(tsne_data, dataset_target, 't-SNE')
-    labels_tsne = L_tsne['GMM']['labels']
-    PlotaDados(tsne_data.T, labels_tsne, dataset_name + '_t-SNE')
-    
-    # Laplacian Eigenmaps (Spectral Embedding)
-    print('Laplacian Eigenmaps results')
-    model = SpectralEmbedding(n_components=d_star)
-    laplacian_data = model.fit_transform(dataset_data)
-    laplacian_data = laplacian_data.T
-    L_laplacian = Clustering(laplacian_data, dataset_target, 'Laplacian Eigenmaps')
-    labels_laplacian = L_laplacian['GMM']['labels']
-    PlotaDados(laplacian_data.T, labels_laplacian, dataset_name + '_LaplacianEigenmaps')
-    
-    # LLE
-    print('LLE results')
-    model = LocallyLinearEmbedding(n_neighbors=nn, n_components=2)
-    LLE_data = model.fit_transform(dataset_data)
-    LLE_data = LLE_data.T
-    L_LLE = Clustering(LLE_data, dataset_target,'LLE')
-    labels_LLE = L_LLE['GMM']['labels']
-    PlotaDados(LLE_data.T, labels_LLE, dataset_name + '_LLE')
-    print('Plots for ' + dataset_name + ' created.')
+        ############## Regular ISOMAP 
+        print('ISOMAP results')
+        model = Isomap(n_neighbors=nn, n_components=2)
+        isomap_data = model.fit_transform(dataset_data)
+        isomap_data = isomap_data.T
+        L_iso = Clustering(isomap_data, dataset_target, 'ISOMAP')
+        labels_iso = L_iso['GMM']['labels']
+        PlotaDados(isomap_data.T, labels_iso, dataset_name + '_ISOMAP')
+        ############## UMAP
+        print('UMAP results')
+        model = UMAP(n_neighbors=nn, n_components=2)
+        umap_data = model.fit_transform(dataset_data)
+        umap_data = umap_data.T
+        L_umap = Clustering(umap_data, dataset_target, 'UMAP')
+        labels_umap = L_umap['GMM']['labels']
+        PlotaDados(umap_data.T, labels_umap, dataset_name + '_UMAP')
+
+
+        # Kernel PCA
+        print('Kernel PCA results')
+        model = KernelPCA(n_components=2, kernel='rbf')
+        kpca_data = model.fit_transform(dataset_data)
+        kpca_data = kpca_data.T
+        L_kpca = Clustering(kpca_data, dataset_target, 'KPCA')
+        labels_kpca = L_kpca['GMM']['labels']
+        PlotaDados(kpca_data.T, labels_kpca, dataset_name + '_KPCA')
+
+        # t-SNE
+        print('t-SNE results')
+        model = TSNE(n_components=2, random_state=42, method='exact')
+        tsne_data = model.fit_transform(dataset_data)
+        tsne_data = tsne_data.T
+        L_tsne = Clustering(tsne_data, dataset_target, 't-SNE')
+        labels_tsne = L_tsne['GMM']['labels']
+        PlotaDados(tsne_data.T, labels_tsne, dataset_name + '_t-SNE')
+
+        # Laplacian Eigenmaps (Spectral Embedding)
+        print('Laplacian Eigenmaps results')
+        model = SpectralEmbedding(n_components=2,n_neighbors=nn)
+        laplacian_data = model.fit_transform(dataset_data)
+        laplacian_data = laplacian_data.T
+        L_laplacian = Clustering(laplacian_data, dataset_target, 'Laplacian Eigenmaps')
+        labels_laplacian = L_laplacian['GMM']['labels']
+        PlotaDados(laplacian_data.T, labels_laplacian, dataset_name + '_LaplacianEigenmaps')
+
+        # LLE
+        print('LLE results')
+        model = LocallyLinearEmbedding(n_neighbors=nn, n_components=2)
+        LLE_data = model.fit_transform(dataset_data)
+        LLE_data = LLE_data.T
+        L_LLE = Clustering(LLE_data, dataset_target,'LLE')
+        labels_LLE = L_LLE['GMM']['labels']
+        PlotaDados(LLE_data.T, labels_LLE, dataset_name + '_LLE')
+        print('Plots for ' + dataset_name + ' created.')
+
+    print('Dataset '+ dataset_name + ' completed.')
 
