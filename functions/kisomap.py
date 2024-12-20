@@ -130,32 +130,33 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     for i in range(n):
         for j in range(i,n):
             if B[i, j] > 0:
-                # Select the d principal components 
-                delta = norm(matriz_pcs[i, :, :d+1] - matriz_pcs[j, :, :d+1], axis=0)
+                
+                # Utilizes all d principal components in curvature vector
+                delta = norm(matriz_pcs[i, :, :] - matriz_pcs[j, :, :], axis=0)
                 
                 ##### Functions of the principal curvatures (definition of the metric)
                 # We must choose one single option for each execution
-                if option == 0:
+                if option == 'norm':
                     B[i, j] = norm(delta)                  # metric A0 - Norms of the principal curvatures
-                elif option == 1:
+                elif option == 'first':
                     B[i, j] = delta[0]                      # metric A1 - Curvature of the first principal component
-                elif option == 2:
+                elif option == 'last':
                     B[i, j] = delta[-1]                    # metric A2 - Curvature of the last principal component
-                elif option == 3:
+                elif option == 'avg_first_last':
                     B[i, j] = (delta[0] + delta[-1])/2     # metric A3 - Average between the curvatures of first and last principal components
-                elif option == 4:
+                elif option == 'mean':
                     B[i, j] = np.sum(delta)/len(delta)     # metric A4 - Mean curvature
-                elif option == 5:
+                elif option == 'max':
                     B[i, j] = max(delta)                   # metric A5 - Maximum curvature
-                elif option == 6:
+                elif option == 'min':
                     B[i, j] = min(delta)                   # metric A6 - Minimum curvature
-                elif option == 7:
+                elif option == 'product_min_max':
                     B[i, j] = min(delta)*max(delta)        # metric A7 - Product between minimum and maximum curvatures
-                elif option == 8:
+                elif option == 'difference_max_min':
                     B[i, j] = max(delta) - min(delta)      # metric A8 - Difference between maximum and minimum curvatures
-                elif option == 9:
+                elif option == 'exponential':
                     B[i, j] = 1 - np.exp(-delta.mean())     # metric A9 - Negative exponential kernel
-                else:
+                elif option == 'mixed': 
                     B[i, j] = ((1-alpha)*(A[i, j]/sum(A[i, :])) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
             
             # Simmetry
@@ -187,6 +188,149 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     # Return the low dimensional coordinates
 
     return output.real, D
+
+
+#################################################################################
+# K-ISOMAP implementation with constrained curvature vector
+#################################################################################
+def ConstrainedKIsomap(dados, k, d, option, alpha=0.5):
+    # Number of samples and features  
+    n = dados.shape[0]
+    m = dados.shape[1]
+    # Matrix to store the principal components for each neighborhood
+    matriz_pcs = np.zeros((n, m, m))
+    # Generate KNN graph
+    knnGraph = sknn.kneighbors_graph(dados, n_neighbors=k, mode='distance')
+    A = knnGraph.toarray()
+    # Computes the means and covariance matrices for each patch
+
+    # Verificar o número de componentes conectados
+    n_connected_components, labels = connected_components(knnGraph)
+
+    # Caso o número de componentes conectados seja maior que 1
+    if n_connected_components > 1:
+        # Verificação de métrica 'precomputed' com matriz esparsa
+        if issparse(A):
+            raise RuntimeError(
+                "The number of connected components of the neighbors graph"
+                f" is {n_connected_components} > 1. The graph cannot be "
+                "completed with metric='precomputed', and Isomap cannot be"
+                " fitted. Increase the number of neighbors to avoid this "
+                "issue, or precompute the full distance matrix instead "
+                "of passing a sparse neighbors graph."
+            )
+
+        # Emitir aviso sobre desempenho
+        warnings.warn(
+            (
+                "The number of connected components of the neighbors graph "
+                f"is {n_connected_components} > 1. Completing the graph to fit"
+                " Isomap might be slow. Increase the number of neighbors to "
+                "avoid this issue."
+            ),
+            stacklevel=2,
+        )
+
+        # Corrigir componentes conexas
+        nbg = _fix_connected_components(
+            X=dados,
+            graph=knnGraph,
+            n_connected_components=n_connected_components,
+            component_labels=labels,
+            mode="distance",
+            metric='euclidean'  
+            # Substitua por sua métrica de distância
+            # Adicione parâmetros adicionais de métrica se necessário
+        )
+        A = nbg.toarray()
+
+    for i in range(n):   
+        vizinhos = A[i, :]
+        indices = vizinhos.nonzero()[0]
+        if len(indices) == 0:                   # Treat isolated points
+            matriz_pcs[i, :, :] = np.eye(m)     # Eigenvectors in columns
+        else:
+            # Get the neighboring samples
+            amostras = dados[indices]
+
+            maximo = np.nanmax(amostras[amostras != np.inf])   
+            amostras[np.isnan(amostras)] = 0
+            amostras[np.isinf(amostras)] = maximo
+            v, w = np.linalg.eig(np.cov(amostras.T))
+            # Sort the eigenvalues
+            ordem = v.argsort()
+            # Select the d eigenvectors associated to the d largest eigenvalues
+            maiores_autovetores = w[:, ordem[::-1]]                 
+            # Projection matrix
+            Wpca = maiores_autovetores  # Autovetores nas colunas
+            #print(Wpca.shape)
+            matriz_pcs[i, :, :] = Wpca
+        
+    # Defines the patch-based matrix (graph)
+    B = A.copy()
+    for i in range(n):
+        for j in range(i,n):
+            if B[i, j] > 0:
+                # Select the d principal components - CONSTRAINED K-ISOMAP TO GET FIRST d PRINCIPAL COMPONENTS
+                delta = norm(matriz_pcs[i, :, :d+1] - matriz_pcs[j, :, :d+1], axis=0)
+                
+                ##### Functions of the principal curvatures (definition of the metric)
+                # We must choose one single option for each execution
+                if option == 'norm':
+                    B[i, j] = norm(delta)                  # metric A0 - Norms of the principal curvatures
+                elif option == 'first':
+                    B[i, j] = delta[0]                      # metric A1 - Curvature of the first principal component
+                elif option == 'last':
+                    B[i, j] = delta[-1]                    # metric A2 - Curvature of the last principal component
+                elif option == 'avg_first_last':
+                    B[i, j] = (delta[0] + delta[-1])/2     # metric A3 - Average between the curvatures of first and last principal components
+                elif option == 'mean':
+                    B[i, j] = np.sum(delta)/len(delta)     # metric A4 - Mean curvature
+                elif option == 'max':
+                    B[i, j] = max(delta)                   # metric A5 - Maximum curvature
+                elif option == 'min':
+                    B[i, j] = min(delta)                   # metric A6 - Minimum curvature
+                elif option == 'product_min_max':
+                    B[i, j] = min(delta)*max(delta)        # metric A7 - Product between minimum and maximum curvatures
+                elif option == 'difference_max_min':
+                    B[i, j] = max(delta) - min(delta)      # metric A8 - Difference between maximum and minimum curvatures
+                elif option == 'exponential':
+                    B[i, j] = 1 - np.exp(-delta.mean())     # metric A9 - Negative exponential kernel
+                elif option == 'mixed': 
+                    B[i, j] = ((1-alpha)*(A[i, j]/sum(A[i, :])) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
+            
+            # Simmetry
+            B[j,i]=B[i,j]
+                 
+                
+    # Computes geodesic distances using the previous selected metric
+    G = nx.from_numpy_array(B)
+    D = nx.floyd_warshall_numpy(G)  
+    # Computes centering matrix H
+    H = np.eye(n, n) - (1/n)*np.ones((n, n))
+    # Computes the inner products matrix B
+    B = -0.5*H.dot(D**2).dot(H)    
+    # Remove infs and nans from B (if the graph is not connected)
+    maximo = np.nanmax(B[B != np.inf])   
+    B[np.isnan(B)] = 0
+    B[np.isinf(B)] = maximo
+    # Eigeendecomposition
+    lambdas, alphas = np.linalg.eig(B)
+    # Sort eigenvalues and eigenvectors
+    indices = lambdas.argsort()[::-1]
+    lambdas = lambdas[indices]
+    alphas = alphas[:, indices]
+    # Select the d largest eigenvectors
+    lambdas = lambdas[0:d]
+    alphas = alphas[:, 0:d]
+    # Computes the intrinsic coordinates
+    output = alphas*np.sqrt(lambdas)    
+    # Return the low dimensional coordinates
+
+    return output.real, D
+
+
+
 
 def KGraph(dados, k, d, option, alpha=0.5):
     # Number of samples and features  
@@ -272,28 +416,28 @@ def KGraph(dados, k, d, option, alpha=0.5):
 
                 ##### Functions of the principal curvatures (definition of the metric)
                 # We must choose one single option for each execution
-                if option == 0:
+                if option == 'norm':
                     B[i, j] = norm(delta)                  # metric A0 - Norms of the principal curvatures
-                elif option == 1:
+                elif option == 'first':
                     B[i, j] = delta[0]                      # metric A1 - Curvature of the first principal component
-                elif option == 2:
+                elif option == 'last':
                     B[i, j] = delta[-1]                    # metric A2 - Curvature of the last principal component
-                elif option == 3:
+                elif option == 'avg_first_last':
                     B[i, j] = (delta[0] + delta[-1])/2     # metric A3 - Average between the curvatures of first and last principal components
-                elif option == 4:
+                elif option == 'mean':
                     B[i, j] = np.sum(delta)/len(delta)     # metric A4 - Mean curvature
-                elif option == 5:
+                elif option == 'max':
                     B[i, j] = max(delta)                   # metric A5 - Maximum curvature
-                elif option == 6:
+                elif option == 'min':
                     B[i, j] = min(delta)                   # metric A6 - Minimum curvature
-                elif option == 7:
+                elif option == 'product_min_max':
                     B[i, j] = min(delta)*max(delta)        # metric A7 - Product between minimum and maximum curvatures
-                elif option == 8:
+                elif option == 'difference_max_min':
                     B[i, j] = max(delta) - min(delta)      # metric A8 - Difference between maximum and minimum curvatures
-                elif option == 9:
+                elif option == 'exponential':
                     B[i, j] = 1 - np.exp(-delta.mean())     # metric A9 - Negative exponential kernel
-                else:
-                    B[i, j] = ((1-alpha)*A[i, j]/sum(A[i, :]) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
+                elif option == 'mixed': 
+                    B[i, j] = ((1-alpha)*(A[i, j]/sum(A[i, :])) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
             
             # Simmetry
             B[j,i]=B[i,j]
