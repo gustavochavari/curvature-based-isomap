@@ -161,7 +161,47 @@ def KIsomap(dados, k, d, option, alpha=0.5):
             
             # Simmetry
             B[j,i]=B[i,j]
-                 
+
+        # Verificar o número de componentes conectados
+    n_connected_components, labels = connected_components(B)
+
+    # Caso o número de componentes conectados seja maior que 1
+    if n_connected_components > 1:
+        # Verificação de métrica 'precomputed' com matriz esparsa
+        if issparse(B):
+            raise RuntimeError(
+                "The number of connected components of the neighbors graph"
+                f" is {n_connected_components} > 1. The graph cannot be "
+                "completed with metric='precomputed', and Isomap cannot be"
+                " fitted. Increase the number of neighbors to avoid this "
+                "issue, or precompute the full distance matrix instead "
+                "of passing a sparse neighbors graph."
+            )
+
+        # Emitir aviso sobre desempenho
+        warnings.warn(
+            (
+                "The number of connected components of the neighbors graph "
+                f"is {n_connected_components} > 1. Completing the graph to fit"
+                " Isomap might be slow. Increase the number of neighbors to "
+                "avoid this issue."
+            ),
+            stacklevel=2,
+        )
+
+        # Corrigir componentes conexas
+        nbg = _fix_connected_components(
+            X=B,
+            graph=B,
+            n_connected_components=n_connected_components,
+            component_labels=labels,
+            mode="distance",
+            metric='euclidean'  
+            # Substitua por sua métrica de distância
+            # Adicione parâmetros adicionais de métrica se necessário
+        )
+
+        B = nbg     
                 
     # Computes geodesic distances using the previous selected metric
     G = nx.from_numpy_array(B)
@@ -301,7 +341,47 @@ def ConstrainedKIsomap(dados, k, d, option, alpha=0.5):
             
             # Simmetry
             B[j,i]=B[i,j]
-                 
+
+        # Verificar o número de componentes conectados
+    n_connected_components, labels = connected_components(B)
+
+    # Caso o número de componentes conectados seja maior que 1
+    if n_connected_components > 1:
+        # Verificação de métrica 'precomputed' com matriz esparsa
+        if issparse(B):
+            raise RuntimeError(
+                "The number of connected components of the neighbors graph"
+                f" is {n_connected_components} > 1. The graph cannot be "
+                "completed with metric='precomputed', and Isomap cannot be"
+                " fitted. Increase the number of neighbors to avoid this "
+                "issue, or precompute the full distance matrix instead "
+                "of passing a sparse neighbors graph."
+            )
+
+        # Emitir aviso sobre desempenho
+        warnings.warn(
+            (
+                "The number of connected components of the neighbors graph "
+                f"is {n_connected_components} > 1. Completing the graph to fit"
+                " Isomap might be slow. Increase the number of neighbors to "
+                "avoid this issue."
+            ),
+            stacklevel=2,
+        )
+
+        # Corrigir componentes conexas
+        nbg = _fix_connected_components(
+            X=B,
+            graph=B,
+            n_connected_components=n_connected_components,
+            component_labels=labels,
+            mode="distance",
+            metric='euclidean'  
+            # Substitua por sua métrica de distância
+            # Adicione parâmetros adicionais de métrica se necessário
+        )
+
+        B = nbg 
                 
     # Computes geodesic distances using the previous selected metric
     G = nx.from_numpy_array(B)
@@ -328,8 +408,6 @@ def ConstrainedKIsomap(dados, k, d, option, alpha=0.5):
     # Return the low dimensional coordinates
 
     return output.real, D
-
-
 
 
 def KGraph(dados, k, d, option, alpha=0.5):
@@ -441,6 +519,47 @@ def KGraph(dados, k, d, option, alpha=0.5):
             
             # Simmetry
             B[j,i]=B[i,j]
+
+        # Verificar o número de componentes conectados
+    n_connected_components, labels = connected_components(B)
+
+    # Caso o número de componentes conectados seja maior que 1
+    if n_connected_components > 1:
+        # Verificação de métrica 'precomputed' com matriz esparsa
+        if issparse(B):
+            raise RuntimeError(
+                "The number of connected components of the neighbors graph"
+                f" is {n_connected_components} > 1. The graph cannot be "
+                "completed with metric='precomputed', and Isomap cannot be"
+                " fitted. Increase the number of neighbors to avoid this "
+                "issue, or precompute the full distance matrix instead "
+                "of passing a sparse neighbors graph."
+            )
+
+        # Emitir aviso sobre desempenho
+        warnings.warn(
+            (
+                "The number of connected components of the neighbors graph "
+                f"is {n_connected_components} > 1. Completing the graph to fit"
+                " Isomap might be slow. Increase the number of neighbors to "
+                "avoid this issue."
+            ),
+            stacklevel=2,
+        )
+
+        # Corrigir componentes conexas
+        nbg = _fix_connected_components(
+            X=B,
+            graph=B,
+            n_connected_components=n_connected_components,
+            component_labels=labels,
+            mode="distance",
+            metric='euclidean'  
+            # Substitua por sua métrica de distância
+            # Adicione parâmetros adicionais de métrica se necessário
+        )
+
+        B = nbg
 
     return B
 
