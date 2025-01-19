@@ -1,0 +1,42 @@
+\begin{tabular}{llllrr}
+\toprule
+             Method & Metric & P-Value Friedman & P-Value Nemenyi &  Test Friedman &  Test Nemenyi \\
+\midrule
+             ISOMAP &     CH &            0.000 &           0.010 &              1 &             1 \\
+             ISOMAP &     DB &            0.001 &           0.001 &              1 &             1 \\
+             ISOMAP &     FM &            0.002 &           0.982 &              1 &             0 \\
+             ISOMAP &     RI &            0.001 &           0.745 &              1 &             0 \\
+             ISOMAP &     SS &            0.000 &           0.029 &              1 &             1 \\
+             ISOMAP &     VS &            0.004 &           0.517 &              1 &             0 \\
+         Kernel PCA &     CH &            0.000 &           0.017 &              1 &             1 \\
+         Kernel PCA &     DB &            0.001 &           0.001 &              1 &             1 \\
+         Kernel PCA &     FM &            0.015 &           0.848 &              1 &             0 \\
+         Kernel PCA &     RI &            0.001 &           0.228 &              1 &             0 \\
+         Kernel PCA &     SS &            0.001 &           0.002 &              1 &             1 \\
+         Kernel PCA &     VS &            0.000 &           0.017 &              1 &             1 \\
+                LLE &     CH &            0.000 &           0.408 &              1 &             0 \\
+                LLE &     DB &            0.005 &           0.228 &              1 &             0 \\
+                LLE &     FM &            0.041 &           1.000 &              1 &             0 \\
+                LLE &     RI &            0.002 &           0.848 &              1 &             0 \\
+                LLE &     SS &            0.002 &           0.017 &              1 &             1 \\
+                LLE &     VS &            0.038 &           0.929 &              1 &             0 \\
+Laplacian Eigenmaps &     CH &            0.001 &           0.046 &              1 &             1 \\
+Laplacian Eigenmaps &     DB &            0.085 &           0.110 &              0 &             0 \\
+Laplacian Eigenmaps &     FM &            0.022 &           0.517 &              1 &             0 \\
+Laplacian Eigenmaps &     RI &            0.002 &           0.982 &              1 &             0 \\
+Laplacian Eigenmaps &     SS &            0.006 &           0.029 &              1 &             1 \\
+Laplacian Eigenmaps &     VS &            0.005 &           0.228 &              1 &             0 \\
+               UMAP &     CH &            0.000 &           0.000 &              1 &             1 \\
+               UMAP &     DB &            0.000 &           0.000 &              1 &             1 \\
+               UMAP &     FM &            0.017 &           0.046 &              1 &             1 \\
+               UMAP &     RI &            0.038 &           0.110 &              1 &             0 \\
+               UMAP &     SS &            0.000 &           0.000 &              1 &             1 \\
+               UMAP &     VS &            0.015 &           0.017 &              1 &             1 \\
+              t-SNE &     CH &            0.000 &           0.029 &              1 &             1 \\
+              t-SNE &     DB &            0.014 &           0.310 &              1 &             0 \\
+              t-SNE &     FM &            0.022 &           0.228 &              1 &             0 \\
+              t-SNE &     RI &            0.005 &           0.310 &              1 &             0 \\
+              t-SNE &     SS &            0.002 &           0.982 &              1 &             0 \\
+              t-SNE &     VS &            0.017 &           0.982 &              1 &             0 \\
+\bottomrule
+\end{tabular}

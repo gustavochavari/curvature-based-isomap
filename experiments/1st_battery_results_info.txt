@@ -1,0 +1,195 @@
+\begin{tabular}{llrrrrrr}
+\toprule
+                  Dataset &              Method &       Time &  Classes &  Dimension &  Features &  Neighbors &  Samples \\
+\midrule
+                    servo &             KISOMAP &   0.120375 &      2.0 &        3.0 &       4.0 &       12.0 &    167.0 \\
+                    servo &              ISOMAP &   0.078393 &      2.0 &        3.0 &       4.0 &       12.0 &    167.0 \\
+                    servo &                UMAP &  11.451482 &      2.0 &        3.0 &       4.0 &       12.0 &    167.0 \\
+                    servo &          Kernel PCA &   0.057946 &      2.0 &        3.0 &       4.0 &       12.0 &    167.0 \\
+                    servo &               t-SNE &   2.199712 &      2.0 &        3.0 &       4.0 &       12.0 &    167.0 \\
+                    servo & Laplacian Eigenmaps &   0.058945 &      2.0 &        3.0 &       4.0 &       12.0 &    167.0 \\
+                    servo &                 LLE &   0.072931 &      2.0 &        3.0 &       4.0 &       12.0 &    167.0 \\
+              tic-tac-toe &             KISOMAP &   8.334683 &      2.0 &        8.0 &       9.0 &       30.0 &    958.0 \\
+              tic-tac-toe &              ISOMAP &   0.749357 &      2.0 &        8.0 &       9.0 &       30.0 &    958.0 \\
+              tic-tac-toe &                UMAP &   4.277114 &      2.0 &        8.0 &       9.0 &       30.0 &    958.0 \\
+              tic-tac-toe &          Kernel PCA &   0.202721 &      2.0 &        8.0 &       9.0 &       30.0 &    958.0 \\
+              tic-tac-toe &               t-SNE &  34.200434 &      2.0 &        8.0 &       9.0 &       30.0 &    958.0 \\
+              tic-tac-toe & Laplacian Eigenmaps &   0.354766 &      2.0 &        8.0 &       9.0 &       30.0 &    958.0 \\
+              tic-tac-toe &                 LLE &   0.569199 &      2.0 &        8.0 &       9.0 &       30.0 &    958.0 \\
+              qsar-biodeg &             KISOMAP &  11.773018 &      2.0 &        2.0 &      41.0 &       32.0 &   1055.0 \\
+              qsar-biodeg &              ISOMAP &   0.882175 &      2.0 &        2.0 &      41.0 &       32.0 &   1055.0 \\
+              qsar-biodeg &                UMAP &   4.766503 &      2.0 &        2.0 &      41.0 &       32.0 &   1055.0 \\
+              qsar-biodeg &          Kernel PCA &   0.235531 &      2.0 &        2.0 &      41.0 &       32.0 &   1055.0 \\
+              qsar-biodeg &               t-SNE &  46.021968 &      2.0 &        2.0 &      41.0 &       32.0 &   1055.0 \\
+              qsar-biodeg & Laplacian Eigenmaps &   0.333614 &      2.0 &        2.0 &      41.0 &       32.0 &   1055.0 \\
+              qsar-biodeg &                 LLE &   0.575505 &      2.0 &        2.0 &      41.0 &       32.0 &   1055.0 \\
+              newton\_hema &             KISOMAP &   0.088813 &      2.0 &        2.0 &       3.0 &       11.0 &    140.0 \\
+              newton\_hema &              ISOMAP &   0.054819 &      2.0 &        2.0 &       3.0 &       11.0 &    140.0 \\
+              newton\_hema &                UMAP &   2.947698 &      2.0 &        2.0 &       3.0 &       11.0 &    140.0 \\
+              newton\_hema &          Kernel PCA &   0.050781 &      2.0 &        2.0 &       3.0 &       11.0 &    140.0 \\
+              newton\_hema &               t-SNE &   1.343977 &      2.0 &        2.0 &       3.0 &       11.0 &    140.0 \\
+              newton\_hema & Laplacian Eigenmaps &   0.058506 &      2.0 &        2.0 &       3.0 &       11.0 &    140.0 \\
+              newton\_hema &                 LLE &   0.066666 &      2.0 &        2.0 &       3.0 &       11.0 &    140.0 \\
+         PhishingWebsites &             KISOMAP &  13.012954 &      2.0 &        2.0 &      30.0 &       33.0 &   1105.0 \\
+         PhishingWebsites &              ISOMAP &   0.997396 &      2.0 &        2.0 &      30.0 &       33.0 &   1105.0 \\
+         PhishingWebsites &                UMAP &   4.843605 &      2.0 &        2.0 &      30.0 &       33.0 &   1105.0 \\
+         PhishingWebsites &          Kernel PCA &   0.219879 &      2.0 &        2.0 &      30.0 &       33.0 &   1105.0 \\
+         PhishingWebsites &               t-SNE &  50.506433 &      2.0 &        2.0 &      30.0 &       33.0 &   1105.0 \\
+         PhishingWebsites & Laplacian Eigenmaps &   0.314385 &      2.0 &        2.0 &      30.0 &       33.0 &   1105.0 \\
+         PhishingWebsites &                 LLE &   0.611453 &      2.0 &        2.0 &      30.0 &       33.0 &   1105.0 \\
+                  Engine1 &             KISOMAP &   0.761225 &      3.0 &        3.0 &       5.0 &       19.0 &    383.0 \\
+                  Engine1 &              ISOMAP &   0.149950 &      3.0 &        3.0 &       5.0 &       19.0 &    383.0 \\
+                  Engine1 &                UMAP &   3.238990 &      3.0 &        3.0 &       5.0 &       19.0 &    383.0 \\
+                  Engine1 &          Kernel PCA &   0.079139 &      3.0 &        3.0 &       5.0 &       19.0 &    383.0 \\
+                  Engine1 &               t-SNE &   9.565643 &      3.0 &        3.0 &       5.0 &       19.0 &    383.0 \\
+                  Engine1 & Laplacian Eigenmaps &   0.101740 &      3.0 &        3.0 &       5.0 &       19.0 &    383.0 \\
+                  Engine1 &                 LLE &   0.146665 &      3.0 &        3.0 &       5.0 &       19.0 &    383.0 \\
+                 satimage &             KISOMAP &  37.327951 &      6.0 &        7.0 &      36.0 &       40.0 &   1607.0 \\
+                 satimage &              ISOMAP &   2.367731 &      6.0 &        7.0 &      36.0 &       40.0 &   1607.0 \\
+                 satimage &                UMAP &   6.726974 &      6.0 &        7.0 &      36.0 &       40.0 &   1607.0 \\
+                 satimage &          Kernel PCA &   0.470741 &      6.0 &        7.0 &      36.0 &       40.0 &   1607.0 \\
+                 satimage &               t-SNE & 233.106190 &      6.0 &        7.0 &      36.0 &       40.0 &   1607.0 \\
+                 satimage & Laplacian Eigenmaps &   0.719779 &      6.0 &        7.0 &      36.0 &       40.0 &   1607.0 \\
+                 satimage &                 LLE &   0.867665 &      6.0 &        7.0 &      36.0 &       40.0 &   1607.0 \\
+                 rabe\_131 &             KISOMAP &   0.026308 &      2.0 &        3.0 &       5.0 &        7.0 &     50.0 \\
+                 rabe\_131 &              ISOMAP &   0.049842 &      2.0 &        3.0 &       5.0 &        7.0 &     50.0 \\
+                 rabe\_131 &                UMAP &   2.928966 &      2.0 &        3.0 &       5.0 &        7.0 &     50.0 \\
+                 rabe\_131 &          Kernel PCA &   0.057741 &      2.0 &        3.0 &       5.0 &        7.0 &     50.0 \\
+                 rabe\_131 &               t-SNE &   0.870275 &      2.0 &        3.0 &       5.0 &        7.0 &     50.0 \\
+                 rabe\_131 & Laplacian Eigenmaps &   0.045365 &      2.0 &        3.0 &       5.0 &        7.0 &     50.0 \\
+                 rabe\_131 &                 LLE &   0.049956 &      2.0 &        3.0 &       5.0 &        7.0 &     50.0 \\
+               Pen-Digits &             KISOMAP &  60.998142 &     10.0 &        4.0 &      16.0 &       43.0 &   1873.0 \\
+               Pen-Digits &              ISOMAP &   3.561566 &     10.0 &        4.0 &      16.0 &       43.0 &   1873.0 \\
+               Pen-Digits &                UMAP &  15.980488 &     10.0 &        4.0 &      16.0 &       43.0 &   1873.0 \\
+               Pen-Digits &          Kernel PCA &   0.632283 &     10.0 &        4.0 &      16.0 &       43.0 &   1873.0 \\
+               Pen-Digits &               t-SNE & 222.281220 &     10.0 &        4.0 &      16.0 &       43.0 &   1873.0 \\
+               Pen-Digits & Laplacian Eigenmaps &   0.821589 &     10.0 &        4.0 &      16.0 &       43.0 &   1873.0 \\
+               Pen-Digits &                 LLE &   1.461986 &     10.0 &        4.0 &      16.0 &       43.0 &   1873.0 \\
+visualizing\_environmental &             KISOMAP &   0.064458 &      2.0 &        2.0 &       3.0 &       10.0 &    111.0 \\
+visualizing\_environmental &              ISOMAP &   0.051237 &      2.0 &        2.0 &       3.0 &       10.0 &    111.0 \\
+visualizing\_environmental &                UMAP &   2.901391 &      2.0 &        2.0 &       3.0 &       10.0 &    111.0 \\
+visualizing\_environmental &          Kernel PCA &   0.049977 &      2.0 &        2.0 &       3.0 &       10.0 &    111.0 \\
+visualizing\_environmental &               t-SNE &   0.874975 &      2.0 &        2.0 &       3.0 &       10.0 &    111.0 \\
+visualizing\_environmental & Laplacian Eigenmaps &   0.068961 &      2.0 &        2.0 &       3.0 &       10.0 &    111.0 \\
+visualizing\_environmental &                 LLE &   0.062474 &      2.0 &        2.0 &       3.0 &       10.0 &    111.0 \\
+                      cmc &             KISOMAP &  28.480079 &      3.0 &        2.0 &       9.0 &       38.0 &   1473.0 \\
+                      cmc &              ISOMAP &   1.853586 &      3.0 &        2.0 &       9.0 &       38.0 &   1473.0 \\
+                      cmc &                UMAP &   6.004072 &      3.0 &        2.0 &       9.0 &       38.0 &   1473.0 \\
+                      cmc &          Kernel PCA &   0.361507 &      3.0 &        2.0 &       9.0 &       38.0 &   1473.0 \\
+                      cmc &               t-SNE &  85.489550 &      3.0 &        2.0 &       9.0 &       38.0 &   1473.0 \\
+                      cmc & Laplacian Eigenmaps &   0.532432 &      3.0 &        2.0 &       9.0 &       38.0 &   1473.0 \\
+                      cmc &                 LLE &   0.785393 &      3.0 &        2.0 &       9.0 &       38.0 &   1473.0 \\
+       steel-plates-fault &             KISOMAP &  63.640861 &      7.0 &        4.0 &      27.0 &       44.0 &   1941.0 \\
+       steel-plates-fault &              ISOMAP &   3.417619 &      7.0 &        4.0 &      27.0 &       44.0 &   1941.0 \\
+       steel-plates-fault &                UMAP &   7.887537 &      7.0 &        4.0 &      27.0 &       44.0 &   1941.0 \\
+       steel-plates-fault &          Kernel PCA &   0.673084 &      7.0 &        4.0 &      27.0 &       44.0 &   1941.0 \\
+       steel-plates-fault &               t-SNE & 229.343668 &      7.0 &        4.0 &      27.0 &       44.0 &   1941.0 \\
+       steel-plates-fault & Laplacian Eigenmaps &   0.940432 &      7.0 &        4.0 &      27.0 &       44.0 &   1941.0 \\
+       steel-plates-fault &                 LLE &   1.959340 &      7.0 &        4.0 &      27.0 &       44.0 &   1941.0 \\
+           car-evaluation &             KISOMAP &  44.496693 &      4.0 &        4.0 &      21.0 &       41.0 &   1728.0 \\
+           car-evaluation &              ISOMAP &   2.489060 &      4.0 &        4.0 &      21.0 &       41.0 &   1728.0 \\
+           car-evaluation &                UMAP &   6.867660 &      4.0 &        4.0 &      21.0 &       41.0 &   1728.0 \\
+           car-evaluation &          Kernel PCA &   0.501091 &      4.0 &        4.0 &      21.0 &       41.0 &   1728.0 \\
+           car-evaluation &               t-SNE & 116.301966 &      4.0 &        4.0 &      21.0 &       41.0 &   1728.0 \\
+           car-evaluation & Laplacian Eigenmaps &   1.270804 &      4.0 &        4.0 &      21.0 &       41.0 &   1728.0 \\
+           car-evaluation &                 LLE &   2.006270 &      4.0 &        4.0 &      21.0 &       41.0 &   1728.0 \\
+                Hopf-Link &             KISOMAP &  22.356317 &      2.0 &        2.0 &       3.0 &       36.0 &   1352.0 \\
+                Hopf-Link &              ISOMAP &   1.590126 &      2.0 &        2.0 &       3.0 &       36.0 &   1352.0 \\
+                Hopf-Link &                UMAP &   5.607838 &      2.0 &        2.0 &       3.0 &       36.0 &   1352.0 \\
+                Hopf-Link &          Kernel PCA &   0.301856 &      2.0 &        2.0 &       3.0 &       36.0 &   1352.0 \\
+                Hopf-Link &               t-SNE &  74.678181 &      2.0 &        2.0 &       3.0 &       36.0 &   1352.0 \\
+                Hopf-Link & Laplacian Eigenmaps &   0.354975 &      2.0 &        2.0 &       3.0 &       36.0 &   1352.0 \\
+                Hopf-Link &                 LLE &   0.499839 &      2.0 &        2.0 &       3.0 &       36.0 &   1352.0 \\
+                  heart-h &             KISOMAP &   0.338129 &      5.0 &        2.0 &      13.0 &       17.0 &    294.0 \\
+                  heart-h &              ISOMAP &   0.116618 &      5.0 &        2.0 &      13.0 &       17.0 &    294.0 \\
+                  heart-h &                UMAP &   3.137107 &      5.0 &        2.0 &      13.0 &       17.0 &    294.0 \\
+                  heart-h &          Kernel PCA &   0.094141 &      5.0 &        2.0 &      13.0 &       17.0 &    294.0 \\
+                  heart-h &               t-SNE &   5.347939 &      5.0 &        2.0 &      13.0 &       17.0 &    294.0 \\
+                  heart-h & Laplacian Eigenmaps &   0.102575 &      5.0 &        2.0 &      13.0 &       17.0 &    294.0 \\
+                  heart-h &                 LLE &   0.131176 &      5.0 &        2.0 &      13.0 &       17.0 &    294.0 \\
+     Repliclust-Archetype &             KISOMAP &  12.826417 &      6.0 &        3.0 &       3.0 &       33.0 &   1100.0 \\
+     Repliclust-Archetype &              ISOMAP &   1.076052 &      6.0 &        3.0 &       3.0 &       33.0 &   1100.0 \\
+     Repliclust-Archetype &                UMAP &   4.951396 &      6.0 &        3.0 &       3.0 &       33.0 &   1100.0 \\
+     Repliclust-Archetype &          Kernel PCA &   0.262827 &      6.0 &        3.0 &       3.0 &       33.0 &   1100.0 \\
+     Repliclust-Archetype &               t-SNE &  79.769329 &      6.0 &        3.0 &       3.0 &       33.0 &   1100.0 \\
+     Repliclust-Archetype & Laplacian Eigenmaps &   0.289203 &      6.0 &        3.0 &       3.0 &       33.0 &   1100.0 \\
+     Repliclust-Archetype &                 LLE &   0.520084 &      6.0 &        3.0 &       3.0 &       33.0 &   1100.0 \\
+    conference\_attendance &             KISOMAP &   0.217477 &      2.0 &        2.0 &       6.0 &       15.0 &    246.0 \\
+    conference\_attendance &              ISOMAP &   0.076421 &      2.0 &        2.0 &       6.0 &       15.0 &    246.0 \\
+    conference\_attendance &                UMAP &   2.925816 &      2.0 &        2.0 &       6.0 &       15.0 &    246.0 \\
+    conference\_attendance &          Kernel PCA &   0.073374 &      2.0 &        2.0 &       6.0 &       15.0 &    246.0 \\
+    conference\_attendance &               t-SNE &   4.174822 &      2.0 &        2.0 &       6.0 &       15.0 &    246.0 \\
+    conference\_attendance & Laplacian Eigenmaps &   0.072564 &      2.0 &        2.0 &       6.0 &       15.0 &    246.0 \\
+    conference\_attendance &                 LLE &   0.085313 &      2.0 &        2.0 &       6.0 &       15.0 &    246.0 \\
+               hayes-roth &             KISOMAP &   0.077183 &      2.0 &        2.0 &       4.0 &       11.0 &    132.0 \\
+               hayes-roth &              ISOMAP &   0.063603 &      2.0 &        2.0 &       4.0 &       11.0 &    132.0 \\
+               hayes-roth &                UMAP &   2.818680 &      2.0 &        2.0 &       4.0 &       11.0 &    132.0 \\
+               hayes-roth &          Kernel PCA &   0.069288 &      2.0 &        2.0 &       4.0 &       11.0 &    132.0 \\
+               hayes-roth &               t-SNE &   1.156765 &      2.0 &        2.0 &       4.0 &       11.0 &    132.0 \\
+               hayes-roth & Laplacian Eigenmaps &   0.071115 &      2.0 &        2.0 &       4.0 &       11.0 &    132.0 \\
+               hayes-roth &                 LLE &   0.066591 &      2.0 &        2.0 &       4.0 &       11.0 &    132.0 \\
+                wisconsin &             KISOMAP &   0.229843 &      2.0 &        7.0 &      32.0 &       13.0 &    194.0 \\
+                wisconsin &              ISOMAP &   0.071582 &      2.0 &        7.0 &      32.0 &       13.0 &    194.0 \\
+                wisconsin &                UMAP &   2.988255 &      2.0 &        7.0 &      32.0 &       13.0 &    194.0 \\
+                wisconsin &          Kernel PCA &   0.060579 &      2.0 &        7.0 &      32.0 &       13.0 &    194.0 \\
+                wisconsin &               t-SNE &   4.362309 &      2.0 &        7.0 &      32.0 &       13.0 &    194.0 \\
+                wisconsin & Laplacian Eigenmaps &   0.079015 &      2.0 &        7.0 &      32.0 &       13.0 &    194.0 \\
+                wisconsin &                 LLE &   0.092330 &      2.0 &        7.0 &      32.0 &       13.0 &    194.0 \\
+               prnn\_synth &             KISOMAP &   0.220771 &      2.0 &        2.0 &       2.0 &       15.0 &    250.0 \\
+               prnn\_synth &              ISOMAP &   0.091393 &      2.0 &        2.0 &       2.0 &       15.0 &    250.0 \\
+               prnn\_synth &                UMAP &   3.012687 &      2.0 &        2.0 &       2.0 &       15.0 &    250.0 \\
+               prnn\_synth &          Kernel PCA &   0.060685 &      2.0 &        2.0 &       2.0 &       15.0 &    250.0 \\
+               prnn\_synth &               t-SNE &   4.267489 &      2.0 &        2.0 &       2.0 &       15.0 &    250.0 \\
+               prnn\_synth & Laplacian Eigenmaps &   0.074868 &      2.0 &        2.0 &       2.0 &       15.0 &    250.0 \\
+               prnn\_synth &                 LLE &   0.087335 &      2.0 &        2.0 &       2.0 &       15.0 &    250.0 \\
+          diggle\_table\_a2 &             KISOMAP &   0.338233 &      2.0 &        2.0 &       8.0 &       17.0 &    310.0 \\
+          diggle\_table\_a2 &              ISOMAP &   0.098938 &      2.0 &        2.0 &       8.0 &       17.0 &    310.0 \\
+          diggle\_table\_a2 &                UMAP &   3.171957 &      2.0 &        2.0 &       8.0 &       17.0 &    310.0 \\
+          diggle\_table\_a2 &          Kernel PCA &   0.067414 &      2.0 &        2.0 &       8.0 &       17.0 &    310.0 \\
+          diggle\_table\_a2 &               t-SNE &   5.858752 &      2.0 &        2.0 &       8.0 &       17.0 &    310.0 \\
+          diggle\_table\_a2 & Laplacian Eigenmaps &   0.091567 &      2.0 &        2.0 &       8.0 &       17.0 &    310.0 \\
+          diggle\_table\_a2 &                 LLE &   0.102668 &      2.0 &        2.0 &       8.0 &       17.0 &    310.0 \\
+            heart-statlog &             KISOMAP &   0.286823 &      2.0 &        6.0 &      13.0 &       16.0 &    270.0 \\
+            heart-statlog &              ISOMAP &   0.102985 &      2.0 &        6.0 &      13.0 &       16.0 &    270.0 \\
+            heart-statlog &                UMAP &   3.123897 &      2.0 &        6.0 &      13.0 &       16.0 &    270.0 \\
+            heart-statlog &          Kernel PCA &   0.071473 &      2.0 &        6.0 &      13.0 &       16.0 &    270.0 \\
+            heart-statlog &               t-SNE &   6.952597 &      2.0 &        6.0 &      13.0 &       16.0 &    270.0 \\
+            heart-statlog & Laplacian Eigenmaps &   0.093418 &      2.0 &        6.0 &      13.0 &       16.0 &    270.0 \\
+            heart-statlog &                 LLE &   0.102986 &      2.0 &        6.0 &      13.0 &       16.0 &    270.0 \\
+                      xd6 &             KISOMAP &   9.731637 &      NaN &        NaN &       NaN &        NaN &      NaN \\
+                      xd6 &              ISOMAP &   0.824224 &      NaN &        NaN &       NaN &        NaN &      NaN \\
+                      xd6 &                UMAP &  16.192760 &      NaN &        NaN &       NaN &        NaN &      NaN \\
+                      xd6 &          Kernel PCA &   0.237777 &      NaN &        NaN &       NaN &        NaN &      NaN \\
+                      xd6 &               t-SNE &  47.080052 &      NaN &        NaN &       NaN &        NaN &      NaN \\
+                      xd6 & Laplacian Eigenmaps &   0.312216 &      NaN &        NaN &       NaN &        NaN &      NaN \\
+                      xd6 &                 LLE &   0.591371 &      NaN &        NaN &       NaN &        NaN &      NaN \\
+                 spambase &             KISOMAP &  15.505388 &      2.0 &        2.0 &      57.0 &       33.0 &   1150.0 \\
+                 spambase &              ISOMAP &   0.994231 &      2.0 &        2.0 &      57.0 &       33.0 &   1150.0 \\
+                 spambase &                UMAP &   5.127070 &      2.0 &        2.0 &      57.0 &       33.0 &   1150.0 \\
+                 spambase &          Kernel PCA &   0.240462 &      2.0 &        2.0 &      57.0 &       33.0 &   1150.0 \\
+                 spambase &               t-SNE &  54.796024 &      2.0 &        2.0 &      57.0 &       33.0 &   1150.0 \\
+                 spambase & Laplacian Eigenmaps &   0.395179 &      2.0 &        2.0 &      57.0 &       33.0 &   1150.0 \\
+                 spambase &                 LLE &   0.685983 &      2.0 &        2.0 &      57.0 &       33.0 &   1150.0 \\
+           fri\_c4\_250\_100 &             KISOMAP &   2.395051 &      2.0 &       33.0 &     100.0 &       15.0 &    250.0 \\
+           fri\_c4\_250\_100 &              ISOMAP &   0.115692 &      2.0 &       33.0 &     100.0 &       15.0 &    250.0 \\
+           fri\_c4\_250\_100 &                UMAP &   3.163953 &      2.0 &       33.0 &     100.0 &       15.0 &    250.0 \\
+           fri\_c4\_250\_100 &          Kernel PCA &   0.076913 &      2.0 &       33.0 &     100.0 &       15.0 &    250.0 \\
+           fri\_c4\_250\_100 &               t-SNE &  10.616862 &      2.0 &       33.0 &     100.0 &       15.0 &    250.0 \\
+           fri\_c4\_250\_100 & Laplacian Eigenmaps &   0.123275 &      2.0 &       33.0 &     100.0 &       15.0 &    250.0 \\
+           fri\_c4\_250\_100 &                 LLE &   0.102340 &      2.0 &       33.0 &     100.0 &       15.0 &    250.0 \\
+                    led24 &             KISOMAP &   3.001261 &     10.0 &       13.0 &      24.0 &       25.0 &    640.0 \\
+                    led24 &              ISOMAP &   0.499463 &     10.0 &       13.0 &      24.0 &       25.0 &    640.0 \\
+                    led24 &                UMAP &   3.918673 &     10.0 &       13.0 &      24.0 &       25.0 &    640.0 \\
+                    led24 &          Kernel PCA &   0.329231 &     10.0 &       13.0 &      24.0 &       25.0 &    640.0 \\
+                    led24 &               t-SNE &  39.907308 &     10.0 &       13.0 &      24.0 &       25.0 &    640.0 \\
+                    led24 & Laplacian Eigenmaps &   0.360369 &     10.0 &       13.0 &      24.0 &       25.0 &    640.0 \\
+                    led24 &                 LLE &   0.423982 &     10.0 &       13.0 &      24.0 &       25.0 &    640.0 \\
+            breast-tissue &             KISOMAP &   0.063490 &      4.0 &        2.0 &       9.0 &       10.0 &    106.0 \\
+            breast-tissue &              ISOMAP &   0.067040 &      4.0 &        2.0 &       9.0 &       10.0 &    106.0 \\
+            breast-tissue &                UMAP &   2.774865 &      4.0 &        2.0 &       9.0 &       10.0 &    106.0 \\
+            breast-tissue &          Kernel PCA &   0.066717 &      4.0 &        2.0 &       9.0 &       10.0 &    106.0 \\
+            breast-tissue &               t-SNE &   0.938374 &      4.0 &        2.0 &       9.0 &       10.0 &    106.0 \\
+            breast-tissue & Laplacian Eigenmaps &   0.079710 &      4.0 &        2.0 &       9.0 &       10.0 &    106.0 \\
+            breast-tissue &                 LLE &   0.075332 &      4.0 &        2.0 &       9.0 &       10.0 &    106.0 \\
+\bottomrule
+\end{tabular}

@@ -61,49 +61,26 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     # Generate KNN graph
     knnGraph = sknn.kneighbors_graph(dados, n_neighbors=k, mode='distance')
     A = knnGraph.toarray()
-    # Computes the means and covariance matrices for each patch
 
     # Verificar o número de componentes conectados
-    n_connected_components, labels = connected_components(knnGraph)
+    n_connected_components, components_labels = connected_components(knnGraph)
 
     # Caso o número de componentes conectados seja maior que 1
     if n_connected_components > 1:
-        # Verificação de métrica 'precomputed' com matriz esparsa
-        if issparse(A):
-            raise RuntimeError(
-                "The number of connected components of the neighbors graph"
-                f" is {n_connected_components} > 1. The graph cannot be "
-                "completed with metric='precomputed', and Isomap cannot be"
-                " fitted. Increase the number of neighbors to avoid this "
-                "issue, or precompute the full distance matrix instead "
-                "of passing a sparse neighbors graph."
-            )
 
-        # Emitir aviso sobre desempenho
-        warnings.warn(
-            (
-                "The number of connected components of the neighbors graph "
-                f"is {n_connected_components} > 1. Completing the graph to fit"
-                " Isomap might be slow. Increase the number of neighbors to "
-                "avoid this issue."
-            ),
-            stacklevel=2,
-        )
+        print("Corrigir componentes conexas do grafo KNN")
 
-        # Corrigir componentes conexas
         nbg = _fix_connected_components(
             X=dados,
             graph=knnGraph,
             n_connected_components=n_connected_components,
-            component_labels=labels,
-            mode="distance",
-            metric='euclidean'  
-            # Substitua por sua métrica de distância
-            # Adicione parâmetros adicionais de métrica se necessário
+            component_labels=components_labels
         )
+
         A = nbg.toarray()
 
-    for i in range(n):   
+    # Computes the means and covariance matrices for each patch
+    for i in range(n):       
         vizinhos = A[i, :]
         indices = vizinhos.nonzero()[0]
         if len(indices) == 0:                   # Treat isolated points
@@ -111,97 +88,61 @@ def KIsomap(dados, k, d, option, alpha=0.5):
         else:
             # Get the neighboring samples
             amostras = dados[indices]
-
-            maximo = np.nanmax(amostras[amostras != np.inf])   
-            amostras[np.isnan(amostras)] = 0
-            amostras[np.isinf(amostras)] = maximo
             v, w = np.linalg.eig(np.cov(amostras.T))
             # Sort the eigenvalues
             ordem = v.argsort()
             # Select the d eigenvectors associated to the d largest eigenvalues
             maiores_autovetores = w[:, ordem[::-1]]                 
             # Projection matrix
-            Wpca = maiores_autovetores  # Autovetores nas colunas
+            Wpca = maiores_autovetores  # Eigenvectors in columns
             #print(Wpca.shape)
             matriz_pcs[i, :, :] = Wpca
         
     # Defines the patch-based matrix (graph)
     B = A.copy()
+
     for i in range(n):
-        for j in range(i,n):
+        for j in range(n):
             if B[i, j] > 0:
-                
-                # Utilizes all d principal components in curvature vector
                 delta = norm(matriz_pcs[i, :, :] - matriz_pcs[j, :, :], axis=0)
                 
                 ##### Functions of the principal curvatures (definition of the metric)
                 # We must choose one single option for each execution
-                if option == 'norm':
+                if option == 0:
                     B[i, j] = norm(delta)                  # metric A0 - Norms of the principal curvatures
-                elif option == 'first':
-                    B[i, j] = delta[0]                      # metric A1 - Curvature of the first principal component
-                elif option == 'last':
+                elif option == 1:
+                    B[i, j] = delta[0]                     # metric A1 - Curvature of the first principal component
+                elif option == 2:
                     B[i, j] = delta[-1]                    # metric A2 - Curvature of the last principal component
-                elif option == 'avg_first_last':
+                elif option == 3:
                     B[i, j] = (delta[0] + delta[-1])/2     # metric A3 - Average between the curvatures of first and last principal components
-                elif option == 'mean':
+                elif option == 4:
                     B[i, j] = np.sum(delta)/len(delta)     # metric A4 - Mean curvature
-                elif option == 'max':
+                elif option == 5:
                     B[i, j] = max(delta)                   # metric A5 - Maximum curvature
-                elif option == 'min':
+                elif option == 6:
                     B[i, j] = min(delta)                   # metric A6 - Minimum curvature
-                elif option == 'product_min_max':
+                elif option == 7:
                     B[i, j] = min(delta)*max(delta)        # metric A7 - Product between minimum and maximum curvatures
-                elif option == 'difference_max_min':
+                elif option == 8:
                     B[i, j] = max(delta) - min(delta)      # metric A8 - Difference between maximum and minimum curvatures
-                elif option == 'exponential':
+                elif option == 9:
                     B[i, j] = 1 - np.exp(-delta.mean())     # metric A9 - Negative exponential kernel
-                elif option == 'mixed': 
-                    B[i, j] = ((1-alpha)*(A[i, j]/sum(A[i, :])) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
-            
-            # Simmetry
-            B[j,i]=B[i,j]
+                else:
+                    B[i, j] = ((1-alpha)*A[i, j]/sum(A[i, :]) + alpha*norm(delta))      # alpha = 0 => regular ISOMAP, alpha = 1 => K-ISOMAP 
 
         # Verificar o número de componentes conectados
-    n_connected_components, labels = connected_components(B)
+    n_connected_components, components_labels = connected_components(B)
 
     # Caso o número de componentes conectados seja maior que 1
     if n_connected_components > 1:
-        # Verificação de métrica 'precomputed' com matriz esparsa
-        if issparse(B):
-            raise RuntimeError(
-                "The number of connected components of the neighbors graph"
-                f" is {n_connected_components} > 1. The graph cannot be "
-                "completed with metric='precomputed', and Isomap cannot be"
-                " fitted. Increase the number of neighbors to avoid this "
-                "issue, or precompute the full distance matrix instead "
-                "of passing a sparse neighbors graph."
-            )
-
-        # Emitir aviso sobre desempenho
-        warnings.warn(
-            (
-                "The number of connected components of the neighbors graph "
-                f"is {n_connected_components} > 1. Completing the graph to fit"
-                " Isomap might be slow. Increase the number of neighbors to "
-                "avoid this issue."
-            ),
-            stacklevel=2,
-        )
-
-        # Corrigir componentes conexas
-        nbg = _fix_connected_components(
+        print("Corrigir componentes conexas do K-Grafo")
+        B = _fix_connected_components(
             X=B,
             graph=B,
             n_connected_components=n_connected_components,
-            component_labels=labels,
-            mode="distance",
-            metric='euclidean'  
-            # Substitua por sua métrica de distância
-            # Adicione parâmetros adicionais de métrica se necessário
+            component_labels=components_labels
         )
-
-        B = nbg     
                 
     # Computes geodesic distances using the previous selected metric
     G = nx.from_numpy_array(B)
@@ -226,7 +167,6 @@ def KIsomap(dados, k, d, option, alpha=0.5):
     # Computes the intrinsic coordinates
     output = alphas*np.sqrt(lambdas)    
     # Return the low dimensional coordinates
-
     return output.real, D
 
 

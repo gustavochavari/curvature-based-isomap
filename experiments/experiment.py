@@ -24,83 +24,86 @@ import json
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from umap import UMAP                 
-from kisomap import KIsomap, Clustering, PlotaDados
+from kisomap import KIsomap, Clustering, PlotaDados, ConstrainedKIsomap
+from make_datasets import HopfLink, RepliclustArchetype, COIL20_data, PenDigits_data, MNIST_data, FMNIST_data, Olivetti_data, APOmentum_data
 from sklearn.decomposition import KernelPCA
 from sklearn.manifold import TSNE, SpectralEmbedding
 from sklearn.manifold import LocallyLinearEmbedding
 
 # To avoid unnecessary warning messages
-warnings.simplefilter(action='ignore')
+# warnings.simplefilter(action='ignore')
 
 CLUSTER = 'GMM'
-# Função para normalizar os dados
-def normalize_metrics(metrics_dict):
-    normalized_metrics = {}
-    for metric, methods in metrics_dict.items():
-        # Concatenar todos os dados
-        all_data = np.concatenate([methods[method] for method in methods])
-        # Normalizar dados
-        min_val, max_val = np.min(all_data), np.max(all_data)
-        all_data_normalized = (all_data - min_val) / (max_val - min_val)
-        # Atualizar dicionário com dados normalizados
-        start = 0
-        for method in methods:
-            end = start + len(methods[method])
-            normalized_metrics.setdefault(metric, {})[method] = all_data_normalized[start:end].tolist()
-            start = end
-    return normalized_metrics
 
+#hopf_link_d, hopf_link_t = HopfLink(noise=True)
+repliclust_d, repliclust_t = RepliclustArchetype()
+#coil20_d, coil20_t = COIL20_data()
+#mnist_d, mnist_t = MNIST_data()
+#fmnist_d, fmnist_t = FMNIST_data()
+#olivetti_d, olivetti_t = Olivetti_data()
+#ap_omentum_d, ap_omentum_t = APOmentum_data()
+#pen_digits_d, pen_digits_t = PenDigits_data()
+
+#hopf_link = {'data': hopf_link_d, 'target': hopf_link_t, 'details': {'name':'Hopf-Link'}}
+repliclust_archetype = {'data': repliclust_d, 'target': repliclust_t, 'details': {'name':'Repliclust-Archetype'}}
+#coil_20 = {'data': coil20_d, 'target': coil20_t, 'details': {'name':'COIL-20'}}
+#mnist = {'data': mnist_d, 'target': mnist_t, 'details': {'name':'MNIST'}}
+#fmnist = {'data': fmnist_d, 'target': fmnist_t, 'details': {'name':'F-MNIST'}}
+#olivetti = {'data': olivetti_d, 'target': olivetti_t, 'details': {'name':'Olivetti-Faces'}}
+#ap_omentum = {'data': ap_omentum_d, 'target': ap_omentum_t, 'details': {'name':'AP-Omentum-Kidney'}}
+#pen_digits = {'data': pen_digits_d, 'target': pen_digits_t, 'details': {'name':'Pen-Digits'}}
 #####################  Data loading
     
 #To perform the experiments according to the article, uncomment the desired sets of datasets
-datasets = [# First set of experiments
-    #{"db": skdata.fetch_openml(name='servo', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
-    #{"db": skdata.fetch_openml(name='car-evaluation', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='breast-tissue', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='Engine1', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='xd6', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='steel-plates-fault', version=3), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='PhishingWebsites', version=1), "reduce_samples": True, "percentage":.1, "reduce_dim":False, "num_features": 0},       
-    #{"db": skdata.fetch_openml(name='satimage', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                  
-    #{"db": skdata.fetch_openml(name='led24', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                     
-    #{"db": skdata.fetch_openml(name='hayes-roth', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='rabe_131', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 2},
-    #{"db": skdata.fetch_openml(name='prnn_synth', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='visualizing_environmental', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='diggle_table_a2', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='newton_hema', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='wisconsin', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='conference_attendance', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 5},
-    #{"db": skdata.fetch_openml(name='tic-tac-toe', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='qsar-biodeg', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 2}]             
-    #{"db": skdata.fetch_openml(name='cmc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
-    #{"db": skdata.fetch_openml(name='heart-statlog', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
+datasets = [
+    ####### First set of experiments
+          #{"db": skdata.fetch_openml(name='servo', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='servo', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='car-evaluation', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='breast-tissue', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='Engine1', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='xd6', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
+          #{"db": skdata.fetch_openml(name='heart-h', version=3), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='steel-plates-fault', version=3), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='PhishingWebsites', version=1), "reduce_samples": True, "percentage":.1, "reduce_dim":False, "num_features": 0},              # 10% of the samples
+          #{"db": skdata.fetch_openml(name='satimage', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                     # 25% of the samples
+          #{"db": skdata.fetch_openml(name='led24', version=1), "reduce_samples": True, "percentage":.20, "reduce_dim":False, "num_features": 0},                       # 20% of the samples
+          #{"db": skdata.fetch_openml(name='hayes-roth', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='rabe_131', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='prnn_synth', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='visualizing_environmental', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='diggle_table_a2', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='newton_hema', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='wisconsin', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='fri_c4_250_100', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          {"db": skdata.fetch_openml(name='conference_attendance', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='tic-tac-toe', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='qsar-biodeg', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='spambase', version=1), "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},                     # 25% of the samples
+          #{"db": skdata.fetch_openml(name='cmc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": skdata.fetch_openml(name='heart-statlog', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": pen_digits, "reduce_samples": True, "percentage":.25, "reduce_dim":False, "num_features": 0},
+          #{"db": hopf_link, "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
+          #{"db": repliclust_archetype, "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0},
 
-    ############################
-    ##Second set of experiments
-    {"db": skdata.fetch_openml(name='cnae-9', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 50},                
-    #{"db": skdata.fetch_openml(name='AP_Breast_Kidney', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 12},        
-    #{"db": skdata.fetch_openml(name='AP_Endometrium_Breast', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 50},     
-    #{"db": skdata.fetch_openml(name='AP_Ovary_Lung', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 20},          
-    #{"db": skdata.fetch_openml(name='OVA_Uterus', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},             
-    #{"db": skdata.fetch_openml(name='micro-mass', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},               
-    #{"db": skdata.fetch_openml(name='har', version=1), "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features": 100},                      
-    #{"db": skdata.fetch_openml(name='eating', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100}]                   
-    #{"db": skdata.fetch_openml(name='oh5.wc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 3},                   
-    {"db": skdata.fetch_openml(name='leukemia', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 3}] 
-    #{"db": skdata.fetch_openml(name='semeion', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 20}]              
-    #{"db": skdata.fetch_openml(name='fri_c4_250_100', version=2), "reduce_samples": False, "percentage":0, "reduce_dim":False, "num_features": 0}]
-    #{"db": skdata.fetch_openml(name='usps', version=3), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 20}]   
-
-    ############################################## 
-    # TO RUN THESE DATASETS, SEE other_datasets.py
-    ##############################################
-    #{"db": omentum_kidney, "reduce_samples": False, "percentage":0.5, "reduce_dim":True, "num_features":100},                                                  
-    #{"db": olivetti, "reduce_samples": False, "percentage":0.5, "reduce_dim":True, "num_features":100},                                                           
-    #{"db": coil_20, "reduce_samples": False, "percentage":0.2, "reduce_dim":True, "num_features":100},                                                          
-    #{"db": pen_digits, "reduce_samples": False, "percentage":0.1, "reduce_dim":False, "num_features":0},                                                       
-    #{"db": mnist, "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features":100},                                                   
-    #{"db": fmnist, "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features":200}]                                                        
+    ###########################
+         # Second set of experiments
+         #{"db": skdata.fetch_openml(name='cnae-9', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 50},                     # 50-D
+         #{"db": skdata.fetch_openml(name='AP_Breast_Kidney', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 500},          # 500-D
+         #{"db": skdata.fetch_openml(name='AP_Endometrium_Breast', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 400},     # 400-D
+         #{"db": skdata.fetch_openml(name='AP_Ovary_Lung', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},             # 100-D
+         #{"db": skdata.fetch_openml(name='OVA_Uterus', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},                # 100-D
+         #{"db": skdata.fetch_openml(name='micro-mass', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},                # 100-D
+         #{"db": skdata.fetch_openml(name='har', version=1), "reduce_samples": True, "percentage":0.1, "reduce_dim":True, "num_features": 100},                      # 10%  of the samples and 100-D
+         #{"db": skdata.fetch_openml(name='eating', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 100},                    # 100-D
+         #{"db": skdata.fetch_openml(name='oh5.wc', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 40},                     # 40-D
+         #{"db": skdata.fetch_openml(name='leukemia', version=1), "reduce_samples": False, "percentage":0, "reduce_dim":True, "num_features": 40},                   # 40-D
+         #{"db": olivetti, "reduce_samples": False, "percentage":1., "reduce_dim":True, "num_features": 100},    
+         #{"db": coil_20, "reduce_samples": False, "percentage":1, "reduce_dim":True, "num_features": 80},
+         #{"db": mnist, "reduce_samples": True, "percentage":0.05, "reduce_dim":True, "num_features": 100},
+         #{"db": fmnist, "reduce_samples": True, "percentage":0.05, "reduce_dim":True, "num_features": 100},
+         #{"db": ap_omentum, "reduce_samples": False, "percentage":1., "reduce_dim":True, "num_features":90}                                               
+    ]                                                       
     
 # If True creates 2D plots
 plot_results = False
@@ -195,58 +198,58 @@ for dataset in datasets:
    
     # K-ISOMAP results
     ri_kiso, ch_kiso, fm_kiso, v_kiso, s_kiso, db_kiso, ac_kiso = [], [], [], [], [], [], []
-    ch_kiso_norm, ri_kiso_norm, fm_kiso_norm, v_kiso_norm, s_kiso_norm, db_kiso_norm = [], [], [], [], [], []
     ri_best_metric, ch_best_metric, fm_best_metric, v_best_metric, s_best_metric, db_best_metric, ac_best_metric = [], [], [], [], [], [], []
 
 
     # ISOMAP results
     ri_iso, ch_iso, fm_iso, v_iso, s_iso, db_iso, ac_iso= [], [], [], [], [], [], []
-    ri_iso_norm, ch_iso_norm, fm_iso_norm, v_iso_norm, s_iso_norm, db_iso_norm = [], [], [], [], [], []
 
 
     # UMAP results
     ri_umap, ch_umap, fm_umap, v_umap, s_umap, db_umap, ac_umap = [], [], [], [], [], [], []
-    ri_umap_norm, ch_umap_norm, fm_umap_norm, v_umap_norm, s_umap_norm, db_umap_norm = [], [], [], [], [], []
-
+    
 
     # RAW results
     ri_raw, ch_raw, fm_raw, v_raw, s_raw, db_raw, ac_raw = [], [], [], [], [], [], []
-    ri_raw_norm, ch_raw_norm, fm_raw_norm, v_raw_norm, s_raw_norm, db_raw_norm = [], [], [], [], [], []
 
     # Kernel PCA results
     ri_kpca, ch_kpca, fm_kpca, v_kpca, s_kpca, db_kpca, ac_kpca = [], [], [], [], [], [], []
-    ri_kpca_norm, ch_kpca_norm, fm_kpca_norm, v_kpca_norm, s_kpca_norm, db_kpca_norm = [], [], [], [], [], []
     
     # t-SNE results
     ri_tsne, ch_tsne, fm_tsne, v_tsne, s_tsne, db_tsne, ac_tsne = [], [], [], [], [], [], []
-    ri_tsne_norm, ch_tsne_norm, fm_tsne_norm, v_tsne_norm, s_tsne_norm, db_tsne_norm = [], [], [], [], [], []
     
     # LLE Eigenmaps results
     ri_laplacian, ch_laplacian, fm_laplacian, v_laplacian, s_laplacian, db_laplacian, ac_laplacian = [], [], [], [], [], [], []
-    ri_laplacian_norm, ch_laplacian_norm, fm_laplacian_norm, v_laplacian_norm, s_laplacian_norm, db_laplacian_norm = [], [], [], [], [], []
-
+    
     # LLE results
     ri_LLE, ch_LLE, fm_LLE, v_LLE, s_LLE, db_LLE, ac_LLE = [], [], [], [], [], [], []
-    ri_LLE_norm, ch_LLE_norm, fm_LLE_norm, v_LLE_norm, s_LLE_norm, db_LLE_norm = [], [], [], [], [], []
 
 
     dataset_data_copy = dataset_data.copy()
 
+    # Inicialização das variáveis de tempo no início do código
+    t_kisomap, t_isomap, t_umap, t_kpca, t_tsne, t_laplacian, t_lle = [], 0, 0, 0, 0, 0, 0
+
     ########## KISOMAP
-    # Computes the results for all 10 curvature based metrics
-    start = time.time()
     
     ri_kmeans, ch_kmeans, fm_kmeans, v_kmeans, s_kmeans, db_kmeans = [], [], [], [], [], []
     ri_gmm, ch_gmm, fm_gmm, v_gmm, s_gmm, db_gmm = [], [], [], [], [], []
     ri_ward, ch_ward, fm_ward, v_ward, s_ward, db_ward = [], [], [], [], [], []
+
+    
     for i in range(11):
+        start = time.time()
         DR_method = 'K-ISOMAP' 
+
         try:
             dados_kiso, _ = KIsomap(dataset_data, nn, d_star, i)  
             print("KISOMAP run: ", i)     
         except Exception as e:
             print(DR_method + " -------- def KIsomap error:", e)
             dados_kiso = []
+    
+        finish = time.time()
+        t_kisomap.append(finish - start)
             
         if dados_kiso.any():
             L_kiso = Clustering(dados_kiso.T, dataset_target, DR_method)
@@ -268,10 +271,11 @@ for dataset in datasets:
             v_ward.append(L_kiso['Ward']['vs'])
             s_ward.append(L_kiso['Ward']['ss'])
             db_ward.append(L_kiso['Ward']['db'])
-    finish = time.time()
-    print('K-ISOMAP results')
-    t_kisomap = finish - start
-    
+
+    t_kisomap = np.mean(t_kisomap)
+    print(f'K-ISOMAP execution time: {t_kisomap:.2f} seconds')
+
+
     # Find best result in terms of Rand index of metric function
     ri_star_kmeans = max(ri_kmeans,default=0)
     ri_star_gmm = max(ri_gmm,default=0)
@@ -323,9 +327,9 @@ for dataset in datasets:
     db_kiso.append([db_star_kmeans, db_star_gmm, db_star_ward])
     db_best_metric.append([db_kmeans.index(db_star_kmeans), db_gmm.index(db_star_gmm), db_ward.index(db_star_ward)])
     
+
     ############## Regular ISOMAP 
-    
-    #print('---------------')
+    start = time.time()
     model = Isomap(n_neighbors=nn, n_components=d_star)
     isomap_data = model.fit_transform(dataset_data)
     isomap_data = isomap_data.T
@@ -337,9 +341,12 @@ for dataset in datasets:
     v_iso.append([L_iso['KMeans']['vs'],L_iso['GMM']['vs'],L_iso['Ward']['vs']])
     s_iso.append([L_iso['KMeans']['ss'],L_iso['GMM']['ss'],L_iso['Ward']['ss']])
     db_iso.append([L_iso['KMeans']['db'],L_iso['GMM']['db'],L_iso['Ward']['db']])
-    print('ISOMAP results')
-    
+    finish = time.time()
+    t_isomap = finish - start
+    print(f'ISOMAP execution time: {t_isomap:.2f} seconds')
+
     ############## UMAP
+    start = time.time()
     model = UMAP(n_components=d_star,n_neighbors=nn)
     umap_data = model.fit_transform(dataset_data)
     umap_data = umap_data.T
@@ -351,10 +358,12 @@ for dataset in datasets:
     v_umap.append([L_umap['KMeans']['vs'],L_umap['GMM']['vs'],L_umap['Ward']['vs']])
     s_umap.append([L_umap['KMeans']['ss'],L_umap['GMM']['ss'],L_umap['Ward']['ss']])
     db_umap.append([L_umap['KMeans']['db'],L_umap['GMM']['db'],L_umap['Ward']['db']])
-    print('UMAP results')
-    
+    finish = time.time()
+    t_umap = finish - start
+    print(f'UMAP execution time: {t_umap:.2f} seconds')
+
     # Kernel PCA
-    #print('---------------')
+    start = time.time()
     model = KernelPCA(n_components=d_star, kernel='rbf')
     kpca_data = model.fit_transform(dataset_data)
     kpca_data = kpca_data.T
@@ -366,9 +375,12 @@ for dataset in datasets:
     v_kpca.append([L_kpca['KMeans']['vs'],L_kpca['GMM']['vs'],L_kpca['Ward']['vs']])
     s_kpca.append([L_kpca['KMeans']['ss'],L_kpca['GMM']['ss'],L_kpca['Ward']['ss']])
     db_kpca.append([L_kpca['KMeans']['db'],L_kpca['GMM']['db'],L_kpca['Ward']['db']])
-    print('Kernel PCA results')
+    finish = time.time()
+    t_kpca = finish - start
+    print(f'Kernel PCA execution time: {t_kpca:.2f} seconds')
 
     # t-SNE
+    start = time.time()
     model = TSNE(n_components=d_star, random_state=42, method='exact')
     tsne_data = model.fit_transform(dataset_data)
     tsne_data = tsne_data.T
@@ -380,10 +392,12 @@ for dataset in datasets:
     v_tsne.append([L_tsne['KMeans']['vs'],L_tsne['GMM']['vs'],L_tsne['Ward']['vs']])
     s_tsne.append([L_tsne['KMeans']['ss'],L_tsne['GMM']['ss'],L_tsne['Ward']['ss']])
     db_tsne.append([L_tsne['KMeans']['db'],L_tsne['GMM']['db'],L_tsne['Ward']['db']])
-    print('t-SNE results')
+    finish = time.time()
+    t_tsne = finish - start
+    print(f't-SNE execution time: {t_tsne:.2f} seconds')
 
-
-    # Laplacian Eigenmaps (Spectral Embedding)
+    # Laplacian Eigenmaps
+    start = time.time()
     model = SpectralEmbedding(n_components=d_star, n_neighbors=nn)
     laplacian_data = model.fit_transform(dataset_data)
     laplacian_data = laplacian_data.T
@@ -395,9 +409,12 @@ for dataset in datasets:
     v_laplacian.append([L_laplacian['KMeans']['vs'],L_laplacian['GMM']['vs'],L_laplacian['Ward']['vs']])
     s_laplacian.append([L_laplacian['KMeans']['ss'],L_laplacian['GMM']['ss'],L_laplacian['Ward']['ss']])
     db_laplacian.append([L_laplacian['KMeans']['db'],L_laplacian['GMM']['db'],L_laplacian['Ward']['db']])
-    print('Laplacian Eigenmaps results')
+    finish = time.time()
+    t_laplacian = finish - start
+    print(f'Laplacian Eigenmaps execution time: {t_laplacian:.2f} seconds')
 
     # LLE
+    start = time.time()
     model = LocallyLinearEmbedding(n_neighbors=nn, n_components=d_star)
     LLE_data = model.fit_transform(dataset_data)
     LLE_data = LLE_data.T
@@ -409,140 +426,50 @@ for dataset in datasets:
     v_LLE.append([L_LLE['KMeans']['vs'],L_LLE['GMM']['vs'],L_LLE['Ward']['vs']])
     s_LLE.append([L_LLE['KMeans']['ss'],L_LLE['GMM']['ss'],L_LLE['Ward']['ss']])
     db_LLE.append([L_LLE['KMeans']['db'],L_LLE['GMM']['db'],L_LLE['Ward']['db']])
-    print('LLE results')
+    finish = time.time()
+    t_lle = finish - start
+    print(f'LLE execution time: {t_lle:.2f} seconds')
 
-    ############## RAW DATA
-    #print('---------------')
+    # RAW Clustering
     DR_method = 'RAW'
-    if reduce_dim:
-        L_ = Clustering(dataset_data.T, dataset_target, DR_method)
-    else:
-        L_ = Clustering(raw_data.T, dataset_target, DR_method)
-    ri_raw.append([L_['KMeans']['ri'],L_['GMM']['ri'],L_['Ward']['ri']])
-    ch_raw.append([L_['KMeans']['ch'],L_['GMM']['ch'],L_['Ward']['ch']])
-    fm_raw.append([L_['KMeans']['fm'],L_['GMM']['fm'],L_['Ward']['fm']])
-    v_raw.append([L_['KMeans']['vs'],L_['GMM']['vs'],L_['Ward']['vs']])
-    s_raw.append([L_['KMeans']['ss'],L_['GMM']['ss'],L_['Ward']['ss']])
-    db_raw.append([L_['KMeans']['db'],L_['GMM']['db'],L_['Ward']['db']])
-    print('RAW results')
+    L_raw = Clustering(dataset_data.T, dataset_target, DR_method)
+    ri_raw.append([L_raw['KMeans']['ri'],L_raw['GMM']['ri'],L_raw['Ward']['ri']])
+    ch_raw.append([L_raw['KMeans']['ch'],L_raw['GMM']['ch'],L_raw['Ward']['ch']])
+    fm_raw.append([L_raw['KMeans']['fm'],L_raw['GMM']['fm'],L_raw['Ward']['fm']])
+    v_raw.append([L_raw['KMeans']['vs'],L_raw['GMM']['vs'],L_raw['Ward']['vs']])
+    s_raw.append([L_raw['KMeans']['ss'],L_raw['GMM']['ss'],L_raw['Ward']['ss']])
+    db_raw.append([L_raw['KMeans']['db'],L_raw['GMM']['db'],L_raw['Ward']['db']])
 
-
-        
-    results[dataset_name] = {
-    "KISOMAP": np.array([ri_kiso, ch_kiso, fm_kiso, v_kiso, s_kiso, db_kiso]).tolist(),
-    "ISOMAP": np.array([ri_iso, ch_iso, fm_iso, v_iso, s_iso, db_iso]).tolist(),
-    "Kernel PCA": np.array([ri_kpca, ch_kpca, fm_kpca, v_kpca, s_kpca, db_kpca]).tolist(),
-    "t-SNE": np.array([ri_tsne, ch_tsne, fm_tsne, v_tsne, s_tsne, db_tsne]).tolist(),
-    "Laplacian Eigenmaps": np.array([ri_laplacian, ch_laplacian, fm_laplacian, v_laplacian, s_laplacian, db_laplacian]).tolist(),
-    "UMAP": np.array([ri_umap, ch_umap, fm_umap, v_umap, s_umap, db_umap]).tolist(),
-    "LLE": np.array([ri_LLE, ch_LLE, fm_LLE, v_LLE, s_LLE, db_LLE]).tolist(),
-    "RAW": np.array([ri_raw, ch_raw, fm_raw, v_raw, s_raw, db_raw]).tolist()
+    # Adicionar os tempos de execução ao dicionário de resultados
+    results[dataset_name + '_time']= {
+            "KISOMAP": t_kisomap,
+            "ISOMAP": t_isomap,
+            "UMAP": t_umap,
+            "Kernel PCA": t_kpca,
+            "t-SNE": t_tsne,
+            "Laplacian Eigenmaps": t_laplacian,
+            "LLE": t_lle,
+            "Samples": n,
+            "Features": m,
+            "Dimension": d_star,
+            "Classes": c,
+            "Neighbors": nn
     }
     
-    # NORMALIZE DATA RESULTS
-    # Dicionário com todas as métricas e métodos
-    metrics_dict = {
-        "ri": {
-            "kiso": ri_kiso, "iso": ri_iso, "umap": ri_umap, "raw": ri_raw,
-            "kpca": ri_kpca, "tsne": ri_tsne, "laplacian": ri_laplacian, "LLE": ri_LLE
-        },
-        "ch": {
-            "kiso": ch_kiso, "iso": ch_iso, "umap": ch_umap, "raw": ch_raw,
-            "kpca": ch_kpca, "tsne": ch_tsne, "laplacian": ch_laplacian, "LLE": ch_LLE
-        },
-        "fm": {
-            "kiso": fm_kiso, "iso": fm_iso, "umap": fm_umap, "raw": fm_raw,
-            "kpca": fm_kpca, "tsne": fm_tsne, "laplacian": fm_laplacian, "LLE": fm_LLE
-        },
-        "vs": {
-            "kiso": v_kiso, "iso": v_iso, "umap": v_umap, "raw": v_raw,
-            "kpca": v_kpca, "tsne": v_tsne, "laplacian": v_laplacian, "LLE": v_LLE
-        },
-        "ss": {
-            "kiso": s_kiso, "iso": s_iso, "umap": s_umap, "raw": s_raw,
-            "kpca": s_kpca, "tsne": s_tsne, "laplacian": s_laplacian, "LLE": s_LLE
-        },
-        "db": {
-            "kiso": db_kiso, "iso": db_iso, "umap": db_umap, "raw": db_raw,
-            "kpca": db_kpca, "tsne": db_tsne, "laplacian": db_laplacian, "LLE": db_LLE
-        }
-    }
-
-    # Normalizar todas as métricas
-    normalized_metrics = normalize_metrics(metrics_dict)
-
-    # Atualizar listas de métricas normalizadas
-    ri_kiso_norm = normalized_metrics["ri"]["kiso"]
-    ri_iso_norm = normalized_metrics["ri"]["iso"]
-    ri_umap_norm = normalized_metrics["ri"]["umap"]
-    ri_raw_norm = normalized_metrics["ri"]["raw"]
-    ri_kpca_norm = normalized_metrics["ri"]["kpca"]
-    ri_tsne_norm = normalized_metrics["ri"]["tsne"]
-    ri_laplacian_norm = normalized_metrics["ri"]["laplacian"]
-    ri_LLE_norm = normalized_metrics["ri"]["LLE"]
-
-
-    ch_kiso_norm = normalized_metrics["ch"]["kiso"]
-    ch_iso_norm = normalized_metrics["ch"]["iso"]
-    ch_umap_norm = normalized_metrics["ch"]["umap"]
-    ch_raw_norm = normalized_metrics["ch"]["raw"]
-    ch_kpca_norm = normalized_metrics["ch"]["kpca"]
-    ch_tsne_norm = normalized_metrics["ch"]["tsne"]
-    ch_laplacian_norm = normalized_metrics["ch"]["laplacian"]
-    ch_LLE_norm = normalized_metrics["ch"]["LLE"]
-
-
-    fm_kiso_norm = normalized_metrics["fm"]["kiso"]
-    fm_iso_norm = normalized_metrics["fm"]["iso"]
-    fm_umap_norm = normalized_metrics["fm"]["umap"]
-    fm_raw_norm = normalized_metrics["fm"]["raw"]
-    fm_kpca_norm = normalized_metrics["fm"]["kpca"]
-    fm_tsne_norm = normalized_metrics["fm"]["tsne"]
-    fm_laplacian_norm = normalized_metrics["fm"]["laplacian"]
-    fm_LLE_norm = normalized_metrics["fm"]["LLE"]
-
-
-    v_kiso_norm = normalized_metrics["vs"]["kiso"]
-    v_iso_norm = normalized_metrics["vs"]["iso"]
-    v_umap_norm = normalized_metrics["vs"]["umap"]
-    v_raw_norm = normalized_metrics["vs"]["raw"]
-    v_kpca_norm = normalized_metrics["vs"]["kpca"]
-    v_tsne_norm = normalized_metrics["vs"]["tsne"]
-    v_laplacian_norm = normalized_metrics["vs"]["laplacian"]
-    v_LLE_norm = normalized_metrics["vs"]["LLE"]
-
-    s_kiso_norm = normalized_metrics["ss"]["kiso"]
-    s_iso_norm = normalized_metrics["ss"]["iso"]
-    s_umap_norm = normalized_metrics["ss"]["umap"]
-    s_raw_norm = normalized_metrics["ss"]["raw"]
-    s_kpca_norm = normalized_metrics["ss"]["kpca"]
-    s_tsne_norm = normalized_metrics["ss"]["tsne"]
-    s_laplacian_norm = normalized_metrics["ss"]["laplacian"]
-    s_LLE_norm = normalized_metrics["ss"]["LLE"]
-
-    db_kiso_norm = normalized_metrics["db"]["kiso"]
-    db_iso_norm = normalized_metrics["db"]["iso"]
-    db_umap_norm = normalized_metrics["db"]["umap"]
-    db_raw_norm = normalized_metrics["db"]["raw"]
-    db_kpca_norm = normalized_metrics["db"]["kpca"]
-    db_tsne_norm = normalized_metrics["db"]["tsne"]
-    db_laplacian_norm = normalized_metrics["db"]["laplacian"]
-    db_LLE_norm = normalized_metrics["db"]["LLE"]
-
-
-    results[dataset_name + '_norm'] = {
-    "KISOMAP": np.array([ri_kiso_norm, ch_kiso_norm, fm_kiso_norm, v_kiso_norm, s_kiso_norm, db_kiso_norm]).tolist(),
-    "ISOMAP": np.array([ri_iso_norm, ch_iso_norm, fm_iso_norm, v_iso_norm, s_iso_norm, db_iso_norm]).tolist(),
-    "Kernel PCA": np.array([ri_kpca_norm, ch_kpca_norm, fm_kpca_norm, v_kpca_norm, s_kpca_norm, db_kpca_norm]).tolist(),
-    "t-SNE": np.array([ri_tsne_norm, ch_tsne_norm, fm_tsne_norm, v_tsne_norm, s_tsne_norm, db_tsne_norm]).tolist(),
-    "Laplacian Eigenmaps": np.array([ri_laplacian_norm, ch_laplacian_norm, fm_laplacian_norm, v_laplacian_norm, s_laplacian_norm, db_laplacian_norm]).tolist(),
-    "UMAP": np.array([ri_umap_norm, ch_umap_norm, fm_umap_norm, v_umap_norm, s_umap_norm, db_umap_norm]).tolist(),
-    "RAW": np.array([ri_raw_norm, ch_raw_norm, fm_raw_norm, v_raw_norm, s_raw_norm, db_raw_norm]).tolist(),
-    "LLE": np.array([ri_LLE_norm, ch_LLE_norm, fm_LLE_norm, v_LLE_norm, s_LLE_norm, db_LLE_norm]).tolist()
+    # Adicionar os resultados do GMM
+    results[dataset_name] = {
+        "KISOMAP": np.array([ri_kiso, ch_kiso, fm_kiso, v_kiso, s_kiso, db_kiso]).tolist(),
+        "ISOMAP": np.array([ri_iso, ch_iso, fm_iso, v_iso, s_iso, db_iso]).tolist(),
+        "Kernel PCA": np.array([ri_kpca, ch_kpca, fm_kpca, v_kpca, s_kpca, db_kpca]).tolist(),
+        "t-SNE": np.array([ri_tsne, ch_tsne, fm_tsne, v_tsne, s_tsne, db_tsne]).tolist(),
+        "Laplacian Eigenmaps": np.array([ri_laplacian, ch_laplacian, fm_laplacian, v_laplacian, s_laplacian, db_laplacian]).tolist(),
+        "UMAP": np.array([ri_umap, ch_umap, fm_umap, v_umap, s_umap, db_umap]).tolist(),
+        "LLE": np.array([ri_LLE, ch_LLE, fm_LLE, v_LLE, s_LLE, db_LLE]).tolist(),
+        "RAW": np.array([ri_raw, ch_raw, fm_raw, v_raw, s_raw, db_raw]).tolist()
     }
 
     # Salvar os resultados em um arquivo JSON (exemplo)
-    file_results = 'plots.json'
+    file_results = '1st_battery_revision_final.json'
 
     # Verifica se já existe o arquivo para não sobreescrever
     try:
