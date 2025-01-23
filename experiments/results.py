@@ -60,8 +60,14 @@ def main():
     # Realizando o join das duas tabelas 
     df_final = pd.merge(df_time, df_info_pivot, on="Dataset", how="left")
 
+    pd.options.display.float_format = '{:.0f}'.format
+
+    # Agrupar por 'Dataset' e agregar as colunas restantes, caso necessário
+    # Por exemplo, usando média para as colunas numéricas
+    df_final_grouped = df_final[['Dataset','Samples', 'Features','Classes','Dimension','Neighbors']].groupby('Dataset').mean().reset_index()
+
     with open(battery_name+'_info.txt', "w", encoding="utf-8") as file:
-        file.write(df_final.to_latex(index=False))
+        file.write(df_final_grouped.to_latex(index=False))
 
     # Definindo paleta de cores
     custom_palette = {
@@ -156,24 +162,19 @@ def main():
 
     df_pivot = df_pivot.sort_index(axis=1)
 
-    results_data = {}
+    
 
     for metric in metrics:
         # Filtrar os dados para a métrica específica
         df_metric = df_pivot.filter(like=metric)  # Filtra colunas relacionadas à métrica
-
-        # Criar dicionário de resultados para a métrica atual
-        results_data[metric] = {}  # Inicializa o dicionário para a métrica
-
-        for method in methods_name:
-            if method in df_metric.columns:
-                # Adiciona os dados para o método atual no dicionário da métrica
-                results_data[metric][method] = df_metric.loc[:, method].values  # Usa loc para acessar os valores
-
-
-
+        
         # Gerar o LaTeX da tabela de dados
-        latex_code = df_metric[methods_name].round(3).to_latex(index=False)
+        if metric == 'CH':
+            pd.options.display.float_format = '{:.1f}'.format
+            latex_code = df_metric[methods_name].round(1).to_latex(index=True)
+        else:
+            pd.options.display.float_format = '{:.3f}'.format
+            latex_code = df_metric[methods_name].round(3).to_latex(index=True)
 
         # Calcular o resumo estatístico
         summary = {"Dataset": ["Média", "Mediana", "Mínimo", "Máximo"]}
@@ -184,13 +185,17 @@ def main():
                 np.min(df_pivot[method][metric]),
                 np.max(df_pivot[method][metric]),
             ]
-
+            
         # Converter o resumo em DataFrame e gerar o LaTeX
         df_summary = pd.DataFrame(summary)
-        summary_latex = df_summary[methods_name].round(3).to_latex(index=False)
+        if metric == 'CH':
+            summary_latex = df_summary.round(1).to_latex(index=False)
+        else:
+            summary_latex = df_summary.round(3).to_latex(index=False)
 
         # Combinar as tabelas e salvar no arquivo
         final_latex = latex_code + "\n\n" + summary_latex
+
         with open(f"{battery_name}_{metric}.txt", "w", encoding="utf-8") as file:
             file.write(final_latex)
 
@@ -199,7 +204,7 @@ def main():
     ####################################################
 
     # Criando subplots para as métricas
-    fig, axes = plt.subplots(2, 3, figsize=(20, 10), constrained_layout=True)
+    fig, axes = plt.subplots(3, 2, figsize=(15, 18), constrained_layout=True)
 
     # Iterando sobre as métricas e eixos para criar os gráficos
     for ax, metric in zip(axes.flat, metrics):
@@ -222,7 +227,7 @@ def main():
         ax.set_ylabel(metric)
         ax.grid(axis='y', linestyle='--', alpha=0.7)
         if metric == 'CH':
-            ax.set_ylim(-100, 5000)  # Ajuste para o intervalo desejado
+            ax.set_ylim(-100, 3000)  # Ajuste para o intervalo desejado
 
     # Salvando os gráficos
     plt.savefig(battery_name+'_boxplots.jpeg', format='jpeg', dpi=300)
